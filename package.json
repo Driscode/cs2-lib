@@ -1,0 +1,46 @@
+{
+    "name": "@driscode/cs2-lib",
+    "description": "A TypeScript library for manipulating Counter-Strike 2 data",
+    "license": "MIT",
+    "author": "driscode",
+    "repository": "driscode/cs2-lib",
+    "type": "module",
+    "main": "dist/index.js",
+    "scripts": {
+        "docs": "typedoc --out docs src/index.ts",
+        "format": "prettier . --write",
+        "prepack": "([ -d dist ] && rm -rf dist); tsc --diagnostics",
+        "test": "vitest --run --testTimeout 120000",
+        "typecheck": "tsc --noEmit",
+        "update": "npm run cs2 && npm run item-generator && npm run item-generator-changelog",
+        "upgrade": "npx npm-check-updates@latest --target minor -u",
+        "container-scraper": "tsx scripts/container-scraper.ts",
+        "cs2": "tsx scripts/cs2.ts",
+        "item-generator-changelog": "tsx scripts/item-generator-changelog.ts",
+        "item-generator": "tsx scripts/item-generator.ts",
+        "non-legacy-paint-scraper": "tsx scripts/non-legacy-paints-scraper.ts",
+        "tint-graffiti-image-scraper": "tsx scripts/tint-graffiti-image-scraper.ts",
+        "tint-graffiti-name-generator": "tsx scripts/tint-graffiti-name-generator.ts"
+    },
+    "devDependencies": {
+        "@ianlucas/depot-downloader": "^2.7.2",
+        "@ianlucas/vrf-decompiler": "^10.2.0",
+        "@types/node": "^18.19.59",
+        "@types/node-fetch": "^2.6.11",
+        "cheerio": "^1.0.0",
+        "dotenv": "^16.4.5",
+        "html-entities": "^2.5.2",
+        "javascript-stringify": "^2.1.0",
+        "node-fetch": "^2.7.0",
+        "prettier": "3.3.3",
+        "string-strip-html": "^13.4.8",
+        "tsx": "^4.19.1",
+        "typedoc": "^0.26.10",
+        "typescript": "^5.6.3",
+        "vitest": "^2.1.3"
+    },
+    "version": "5.8.1-driscode-3",
+    "dependencies": {
+        "nvs": "^0.5.3"
+    }
+}
