@@ -17,6 +17,7 @@ export type CS2ItemTeamValues = EnumValues<typeof CS2ItemTeam>;
 export const CS2ItemType = {
     Agent: "agent",
     WeaponComponent: "weapon_component",
+    Blueprint: "blueprint",
     Collectible: "collectible",
     Container: "case",
     Gloves: "glove",
