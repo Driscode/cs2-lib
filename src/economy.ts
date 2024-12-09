@@ -310,6 +310,8 @@ export class CS2EconomyItem
     model: string | undefined;
     name: string = null!;
     rarity: CS2RarityColorValues = null!;
+    parentPaintkitId: number | undefined;
+    componentName: string | undefined;
     specialsImage: boolean | undefined;
     statTrakless: boolean | undefined;
     statTrakOnly: boolean | undefined;
