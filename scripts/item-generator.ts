@@ -102,6 +102,7 @@ export class ItemGenerator {
     private itemSetItemKey: Record<string, string | undefined> = null!;
     private itemsRaritiesColorHex: typeof this.raritiesColorHex = null!;
     private paintKitsRaritiesColorHex: typeof this.raritiesColorHex = null!;
+    private paintKitsRaritiesColorHexCustom: typeof this.raritiesColorHex = null!;
     private raritiesColorHex: Record<string, string | undefined> = null!;
 
     private containerScraper = new ContainerScraper();
@@ -197,6 +198,11 @@ export class ItemGenerator {
 
     async readItemsGameCustomFile() {
         this.gameItemsCustom = CS2KeyValues.parse<CS2GameItems>(await readFile(ITEMS_GAME_CUSTOM_PATH, "utf-8")).items_game;
+
+        this.paintKitsRaritiesColorHexCustom = Object.fromEntries(
+            Object.entries(this.gameItemsCustom.paint_kits_rarity).map(([paintKitKey, rarityKey]) => {
+                return [paintKitKey, this.raritiesColorHex[rarityKey]] as const;
+            }));
         this.paintKitsCustom = Object.entries(this.gameItemsCustom.paint_kits)
             .map(([paintKitIndex, {description_tag, description_string, name, wear_remap_max, wear_remap_min}]) => {
                 assert(name);
@@ -229,8 +235,7 @@ export class ItemGenerator {
         this.paintKitsRaritiesColorHex = Object.fromEntries(
             Object.entries(this.gameItems.paint_kits_rarity).map(([paintKitKey, rarityKey]) => {
                 return [paintKitKey, this.raritiesColorHex[rarityKey]] as const;
-            })
-        );
+            }));
         const rarityKeys = Object.keys(this.raritiesColorHex);
         this.itemsRaritiesColorHex = Object.fromEntries(
             // Mapping rarities for items inside loot lists. Looks like this is
@@ -498,11 +503,13 @@ export class ItemGenerator {
                 const newIndexItem = `${parent_paintkit_id}${index}${component[0]}0`;
                 const newIndexBlueprint = `${parent_paintkit_id}${index}${component[0]}1`;
                 const id = this.itemIdentifierManager.get(`weaponcomponent_${index}_${component}`);
+
                 const idBlueprint = this.itemIdentifierManager.get(`blueprint_${index}_${component}`);
                 const componentLoc = [`${paintKit?.nameToken}`, ' | ', `#${component[1]}`];
                 const image_inventory = image_dir + "/" + component[1];
                 const itemKey = `[${paintKit.className}]${component[1]}`;
-                const rarityColorHex = this.paintKitsRaritiesColorHex[itemKey] as CS2RarityColorValues
+                console.log(itemKey)
+                const rarityColorHex = this.paintKitsRaritiesColorHexCustom[itemKey] as CS2RarityColorValues
                 if (rarityColorHex === undefined) continue
                 this.addContainerItem(itemKey, idBlueprint);
                 this.addTranslation(id, "name", "#CSGO_Type_WeaponComponent", " | ", ...componentLoc);
@@ -1010,7 +1017,9 @@ export class ItemGenerator {
             console.log(clientLootListKey)
             for (const itemKey of this.getClientLootListCustomItems(clientLootListKey)) {
                 const id = ensure(this.containerItems.get(itemKey));
+                console.log(id)
                 const item = ensure(this.items.get(id));
+                console.log(item)
                 contentsType = item.type;
                 if (item.tint !== undefined) {
                     assert(item.index);
@@ -1467,6 +1476,9 @@ export class ItemGenerator {
     }
 
     private getClientLootListCustomItems(clientLootListKey: string, items: string[] = []) {
+        console.log(this.gameItemsCustom.client_loot_lists)
+        console.log(clientLootListKey)
+        console.log(this.gameItemsCustom.client_loot_lists[clientLootListKey])
         if (!this.gameItemsCustom.client_loot_lists[clientLootListKey]) {
             return [];
         }
@@ -1479,7 +1491,7 @@ export class ItemGenerator {
             } else {
                 // If we did not find, that means that it's probably a reference
                 // to another loot list...
-                this.getClientLootListItems(itemOrClientLootListKey, items);
+                this.getClientLootListCustomItems(itemOrClientLootListKey, items);
             }
         }
         return items;
