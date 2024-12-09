@@ -1,0 +1,170 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Ian Lucas. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+import { CS2Item } from "../src/economy-types";
+
+export type CS2Language = {
+    lang: {
+        Tokens: { [key: string]: string | undefined };
+    };
+};
+
+export type CS2GameItems = {
+    items_game: {
+        alternate_icons2: {
+            weapon_icons: {
+                [weaponIconKey: string]: {
+                    icon_path: string;
+                };
+            };
+        };
+        item_sets: {
+            [itemSetKey: string]: {
+                name?: string;
+                set_description?: string;
+                items: {
+                    [itemId: string]: string;
+                };
+            };
+        };
+        client_loot_lists: {
+            [clientLootListKey: string]: {
+                [itemOrLootListKey: string]: string;
+            };
+        };
+        colors: {
+            [colorKey: string]:
+                | {
+                      hex_color: string;
+                  }
+                | undefined;
+        };
+        graffiti_tints: {
+            [graffitiTintKey: string]: {
+                id: string;
+                hex_color: string;
+            };
+        };
+        items: {
+            [itemIndex: string]: {
+                associated_items?: {
+                    [itemIndex: string]: string;
+                };
+                attributes?: {
+                    ["set supply crate series"]?: {
+                        attribute_class?: string;
+                        value?: string;
+                    };
+                    ["pedestal display model"]?: string;
+                    ["tournament event id"]?: {
+                        value: string;
+                    };
+                };
+                baseitem?: string;
+                flexible_loadout_slot?: string;
+                image_inventory?: string;
+                image_unusual_item?: string;
+                item_description?: string;
+                item_name?: string;
+                item_rarity: string;
+                loot_list_name?: string;
+                model_player?: string;
+                name: string;
+                prefab?: string;
+                tags?: {
+                    ItemSet?: {
+                        tag_value?: string;
+                    };
+                    StickerCapsule?: {
+                        [tagKey: string]: string;
+                    };
+                };
+                tool?: {
+                    type?: string;
+                    use_string?: string;
+                };
+                used_by_classes?: Record<string, string>;
+                vo_prefix?: string;
+            };
+        };
+        music_definitions: {
+            [musicIndex: string]: {
+                image_inventory: string;
+                loc_description: string;
+                loc_name: string;
+                name: string;
+            };
+        };
+        paint_kits: {
+            [paintKitKey: string]: {
+                description_string?: string;
+                description_tag?: string;
+                name?: string;
+                wear_remap_max?: string;
+                wear_remap_min?: string;
+            };
+        };
+        paint_kits_rarity: {
+            [paintKitKey: string]: string;
+        };
+        prefabs: {
+            [prefabKey: string]:
+                | {
+                      image_inventory?: string;
+                      item_class: string;
+                      item_description?: string;
+                      item_name: string;
+                      item_rarity: string;
+                      prefab: string;
+                      used_by_classes: Record<string, string>;
+                      visuals: {
+                          weapon_type: string;
+                      };
+                  }
+                | undefined;
+        };
+        rarities: {
+            [rarityKey: string]: {
+                color?: string;
+            };
+        };
+        revolving_loot_lists: {
+            [revolvingLootListKey: string]: string;
+        };
+        sticker_kits: {
+            [stickerIndex: string]: {
+                description_string?: string;
+                item_name: string;
+                item_rarity: string;
+                name: string;
+                patch_material?: string;
+                sticker_material: string;
+                tournament_event_id?: string;
+            };
+        };
+        weapon_sets: {
+            [weaponSetIndex: string]: {
+                parent_paintkit_id: string;
+                item_rarity?: string;
+                component_quantity?: string;
+                component_list: {
+                    [component_index: string]: string;
+                };
+            };
+        }
+    };
+};
+
+export type CS2ExtendedItem = CS2Item & {
+    className?: string;
+    descToken?: string;
+    nameToken?: string;
+};
+
+export type CS2ExportItem = CS2Item & {
+    className: undefined;
+    descToken: undefined;
+    nameToken: undefined;
+};
