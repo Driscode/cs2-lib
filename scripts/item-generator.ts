@@ -518,7 +518,7 @@ export class ItemGenerator {
                     base,
                     baseId,
                     id: idBlueprint,
-                    image: this.itemManager.get(idBlueprint)?.image ?? this.getImage(id, image_inventory, ""),
+                    image: this.itemManager.get(idBlueprint)?.image ?? this.getImage(idBlueprint, image_inventory, ""),
                     index: Number(newIndexBlueprint),
                     rarity: rarityColorHex,
                     componentName: component[1],
