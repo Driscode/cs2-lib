@@ -1008,7 +1008,7 @@
                 let contentsType: CS2ItemTypeValues | undefined;
                 const contents: number[] = [];
                 console.log(clientLootListKey)
-                for (const itemKey of this.getClientLootListItems(clientLootListKey)) {
+                for (const itemKey of this.getClientLootListCustomItems(clientLootListKey)) {
                     const id = ensure(this.containerItems.get(itemKey));
                     const item = ensure(this.items.get(id));
                     contentsType = item.type;
