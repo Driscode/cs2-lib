@@ -1,4 +1,3 @@
-
     /*---------------------------------------------------------------------------------------------
      *  Copyright (c) Ian Lucas. All rights reserved.
      *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -506,7 +505,6 @@
                     const image_inventory = image_dir + "/" + component[1];
                     const itemKey = `[${paintKit.className}]${component[1]}`;
                     this.addContainerItem(itemKey, idBlueprint);
-                    console.log(itemKey)
                     this.addTranslation(id, "name", "#CSGO_Type_WeaponComponent", " | ", ...componentLoc);
     
                     this.addTranslation(idBlueprint, "name", "#CSGO_Type_Blueprint", " | ", ...componentLoc);
@@ -880,6 +878,7 @@
                 if (clientLootListKey === undefined) {
                     continue;
                 }
+                console.log(item_name)
                 let contentsType: CS2ItemTypeValues | undefined;
                 const contents: number[] = [];
                 for (const itemKey of this.getClientLootListItems(clientLootListKey)) {
@@ -897,6 +896,8 @@
                         contents.push(id);
                     }
                 }
+                console.log(2)
+                console.log(contents)
                 if (contents.length > 0) {
                     // Asserts if the container requires a key.
                     assert(
@@ -1444,8 +1445,27 @@
                 this.containerItems.set(itemKey, id);
             }
         }
-    
+
         private getClientLootListItems(clientLootListKey: string, items: string[] = []) {
+            if (!this.gameItems.client_loot_lists[clientLootListKey]) {
+                return [];
+            }
+            const itemOrClientLootListKeys = Object.keys(this.gameItems.client_loot_lists[clientLootListKey]);
+            for (const itemOrClientLootListKey of itemOrClientLootListKeys) {
+                // At this point, `containerItems` should be populated with all
+                // economy items that can be retrieved from containers.
+                if (this.containerItems.has(itemOrClientLootListKey)) {
+                    items.push(itemOrClientLootListKey);
+                } else {
+                    // If we did not find, that means that it's probably a reference
+                    // to another loot list...
+                    this.getClientLootListItems(itemOrClientLootListKey, items);
+                }
+            }
+            return items;
+        }
+
+        private getClientLootListCustomItems(clientLootListKey: string, items: string[] = []) {
             if (!this.gameItemsCustom.client_loot_lists[clientLootListKey]) {
                 return [];
             }
