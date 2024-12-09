@@ -16,6 +16,7 @@ export type CS2ItemTeamValues = EnumValues<typeof CS2ItemTeam>;
 
 export const CS2ItemType = {
     Agent: "agent",
+    WeaponComponent: "weapon_component",
     Collectible: "collectible",
     Container: "case",
     Gloves: "glove",
@@ -68,6 +69,8 @@ export interface CS2Item {
     legacy?: boolean | undefined;
     model?: string | undefined;
     rarity?: CS2RarityColorValues | undefined;
+    parentPaintkitId?: number | undefined;
+    componentName?: string | undefined;
     specials?: number[] | undefined;
     specialsImage?: boolean | undefined;
     statTrakless?: boolean | undefined;
