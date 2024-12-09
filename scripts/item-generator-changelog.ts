@@ -9,7 +9,7 @@ import { CS2_ITEMS } from "../src/items";
 import { ensure } from "../src/utils";
 import { readJson, shouldRun, write } from "./utils";
 
-const repoBaseUrl = "https://raw.githubusercontent.com/ianlucas/cs2-lib/main";
+const repoBaseUrl = "https://raw.githubusercontent.com/driscode/cs2-lib/main";
 
 async function fetchFromRepo<T = any>(path: string): Promise<T> {
     return await (await fetch(`${repoBaseUrl}/${path}`)).json();

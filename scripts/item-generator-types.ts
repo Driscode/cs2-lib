@@ -144,6 +144,16 @@ export type CS2GameItems = {
                 tournament_event_id?: string;
             };
         };
+        weapon_sets: {
+            [weaponSetIndex: string]: {
+                parent_paintkit_id: string;
+                item_rarity?: string;
+                component_quantity?: string;
+                component_list: {
+                    [component_index: string]: string;
+                };
+            };
+        }
     };
 };
 
