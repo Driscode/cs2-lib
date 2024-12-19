@@ -1020,7 +1020,7 @@ export class ItemGenerator {
                     contents.push(id);
                 }
             }
-            if (contents.length > 0) {
+            if (contents.length >= 0) {
                 // Asserts if the container requires a key.
                 assert(
                     associated_items !== undefined ||
@@ -1058,7 +1058,7 @@ export class ItemGenerator {
                 });
                 const containerName = this.requireTranslation(item_name);
                 const id = this.itemIdentifierManager.get(`case_${containerIndex}`);
-                const specials = this.containerScraper.getSpecials(containerName) ?? HARDCODED_SPECIALS[id];
+                const specials = this.containerScraper.getSpecials(containerName) ?? HARDCODED_SPECIALS[id]
                 const containsMusicKit = containerName.includes("Music Kit");
                 const containsStatTrak = containerName.includes("StatTrak");
                 this.addTranslation(id, "name", "#CSGO_Type_WeaponCase", " | ", item_name);
@@ -1066,7 +1066,7 @@ export class ItemGenerator {
                 this.addItem({
                     ...this.getCustomCollection(id, tags?.ItemSet?.tag_value),
                     containerType: this.getContainerType(containerName, contentsType),
-                    contents,
+                    contents: contents.length > 0 ? contents : this.containerScraper.getAllSpecials(),
                     def: Number(containerIndex),
                     id,
                     image: this.itemManager.get(id)?.image ?? this.getImage(id, image_inventory),

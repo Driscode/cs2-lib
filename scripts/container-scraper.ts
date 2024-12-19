@@ -13,7 +13,7 @@ const MELEE_OR_GLOVES_TYPES: CS2ItemTypeValues[] = [CS2ItemType.Melee, CS2ItemTy
 export class ContainerScraper {
     private specialsData = readJson<Record<string, string[]>>("assets/data/container-specials.json", {});
     private specials: Record<string, number[] | undefined> = {};
-
+    private allSpecials: number[] = [];
     async run() {
         const containerUrlRE = /"(https:\/\/csgostash\.com\/case\/\d+\/[^"]+)"/g;
         const url = "https://csgostash.com";
@@ -72,11 +72,16 @@ export class ContainerScraper {
         }
         for (const [containerName, specials] of Object.entries(this.specialsData)) {
             this.specials[containerName] = specials.map((name) => ensure(lookup[name]));
+            this.allSpecials = this.allSpecials.concat(specials.map((name) => ensure(lookup[name])));
         }
+        console.log(this.allSpecials)
     }
 
     getSpecials(containerName: string) {
         return this.specials[containerName];
+    }
+    getAllSpecials() {
+        return this.allSpecials
     }
 }
 
