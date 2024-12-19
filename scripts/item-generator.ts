@@ -1020,7 +1020,6 @@ export class ItemGenerator {
                     contents.push(id);
                 }
             }
-            console.log(contents);
             if (contents.length > 0) {
                 // Asserts if the container requires a key.
                 assert(
