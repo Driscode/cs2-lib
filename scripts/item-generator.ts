@@ -508,7 +508,6 @@ export class ItemGenerator {
                 const componentLoc = [`${paintKit?.nameToken}`, ' | ', `#${component[1]}`];
                 const image_inventory = image_dir + "/" + component[1];
                 const itemKey = `[${paintKit.className}]${component[1]}`;
-                console.log(itemKey)
                 const rarityColorHex = this.paintKitsRaritiesColorHexCustom[itemKey] as CS2RarityColorValues
                 if (rarityColorHex === undefined) continue
                 this.addContainerItem(itemKey, idBlueprint);
@@ -885,7 +884,6 @@ export class ItemGenerator {
             if (clientLootListKey === undefined) {
                 continue;
             }
-            console.log(item_name)
             let contentsType: CS2ItemTypeValues | undefined;
             const contents: number[] = [];
             for (const itemKey of this.getClientLootListItems(clientLootListKey)) {
@@ -903,8 +901,6 @@ export class ItemGenerator {
                     contents.push(id);
                 }
             }
-            console.log(2)
-            console.log(contents)
             if (contents.length > 0) {
                 // Asserts if the container requires a key.
                 assert(
@@ -948,7 +944,6 @@ export class ItemGenerator {
                 const containsStatTrak = containerName.includes("StatTrak");
                 this.addTranslation(id, "name", "#CSGO_Type_WeaponCase", " | ", item_name);
                 this.tryAddTranslation(id, "desc", item_description);
-                console.log(item_name)
                 this.addItem({
                     ...this.getCollection(id, tags?.ItemSet?.tag_value),
                     containerType: this.getContainerType(containerName, contentsType),
@@ -1000,26 +995,19 @@ export class ItemGenerator {
                 continue;
             }
             const revolvingLootListKey = attributes?.["set supply crate series"]?.value;
-            console.log(revolvingLootListKey)
-            console.log(loot_list_name)
             assert(revolvingLootListKey !== undefined || loot_list_name !== undefined);
             const clientLootListKey =
                 revolvingLootListKey !== undefined
                     ? this.gameItemsCustom.revolving_loot_lists[revolvingLootListKey]
                     : loot_list_name;
-            console.log(revolvingLootListKey)
-            console.log(clientLootListKey)
             if (clientLootListKey === undefined) {
                 continue;
             }
             let contentsType: CS2ItemTypeValues | undefined;
             const contents: number[] = [];
-            console.log(clientLootListKey)
             for (const itemKey of this.getClientLootListCustomItems(clientLootListKey)) {
                 const id = ensure(this.containerItems.get(itemKey));
-                console.log(id)
                 const item = ensure(this.items.get(id));
-                console.log(item)
                 contentsType = item.type;
                 if (item.tint !== undefined) {
                     assert(item.index);
@@ -1069,7 +1057,6 @@ export class ItemGenerator {
                     });
                     return id;
                 });
-                console.log(item_name)
                 const containerName = this.requireTranslation(item_name);
                 const id = this.itemIdentifierManager.get(`case_${containerIndex}`);
                 const specials = this.containerScraper.getSpecials(containerName) ?? HARDCODED_SPECIALS[id];
@@ -1077,7 +1064,6 @@ export class ItemGenerator {
                 const containsStatTrak = containerName.includes("StatTrak");
                 this.addTranslation(id, "name", "#CSGO_Type_WeaponCase", " | ", item_name);
                 this.tryAddTranslation(id, "desc", item_description);
-                console.log(item_name)
                 this.addItem({
                     ...this.getCustomCollection(id, tags?.ItemSet?.tag_value),
                     containerType: this.getContainerType(containerName, contentsType),
@@ -1476,9 +1462,6 @@ export class ItemGenerator {
     }
 
     private getClientLootListCustomItems(clientLootListKey: string, items: string[] = []) {
-        console.log(this.gameItemsCustom.client_loot_lists)
-        console.log(clientLootListKey)
-        console.log(this.gameItemsCustom.client_loot_lists[clientLootListKey])
         if (!this.gameItemsCustom.client_loot_lists[clientLootListKey]) {
             return [];
         }
