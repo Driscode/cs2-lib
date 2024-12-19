@@ -493,7 +493,7 @@ export class ItemGenerator {
         const blueprintCaseItems = [];
         for (const [
             index,
-            {parent_paintkit_id, image_dir, item_rarity, component_quantity, component_list}
+            {parent_paintkit_id, image_dir, component_quantity, component_list}
         ] of Object.entries(this.gameItemsCustom.weapon_sets)) {
             const paintKit = this.paintKits.find(({index}) => index === Number(parent_paintkit_id))
             if (paintKit === undefined) continue
