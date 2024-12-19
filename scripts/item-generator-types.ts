@@ -147,7 +147,7 @@ export type CS2GameItems = {
         weapon_sets: {
             [weaponSetIndex: string]: {
                 parent_paintkit_id: string;
-                item_rarity?: string;
+                image_dir: string;
                 component_quantity?: string;
                 component_list: {
                     [component_index: string]: string;
