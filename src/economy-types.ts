@@ -48,7 +48,8 @@ export const CS2ContainerType = {
     WeaponCase: 0,
     StickerCapsule: 1,
     GraffitiBox: 2,
-    SouvenirCase: 3
+    SouvenirCase: 3,
+    BlueprintCase: 4
 } as const;
 
 export type CS2ContainerTypeValues = EnumValues<typeof CS2ContainerType>;
