@@ -201,6 +201,8 @@ export class ItemGenerator {
 
         this.paintKitsRaritiesColorHexCustom = Object.fromEntries(
             Object.entries(this.gameItemsCustom.paint_kits_rarity).map(([paintKitKey, rarityKey]) => {
+                console.log(paintKitKey);
+                console.log(rarityKey);
                 return [paintKitKey, this.raritiesColorHex[rarityKey]] as const;
             }));
         this.paintKitsCustom = Object.entries(this.gameItemsCustom.paint_kits)
@@ -1066,7 +1068,7 @@ export class ItemGenerator {
                 this.addItem({
                     ...this.getCustomCollection(id, tags?.ItemSet?.tag_value),
                     containerType: this.getContainerType(containerName, contentsType),
-                    contents: contents.length > 0 ? contents : this.containerScraper.getAllSpecials(),
+                    contents: contents.length > 0 ? contents : this.containerScraper.getAllMelee(),
                     def: Number(containerIndex),
                     id,
                     image: this.itemManager.get(id)?.image ?? this.getImage(id, image_inventory),
