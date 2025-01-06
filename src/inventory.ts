@@ -211,10 +211,7 @@ export class CS2Inventory {
                     equipped: undefined,
                     equippedCT: undefined,
                     equippedT: undefined,
-                    updatedAt: getTimestamp(),
-                    sellable: true,
-                    tradable: true,
-                    recyclable: true,
+                    updatedAt: getTimestamp()
                 }),
                 economyItem
             )
@@ -238,10 +235,7 @@ export class CS2Inventory {
         this.get(nameTagUid).expectNameTag();
         this.economy.requireNametag(nameTag);
         this.items.delete(nameTagUid);
-        this.add({ id, nameTag,
-            sellable: true,
-            tradable: true,
-            recyclable: true, });
+        this.add({ id, nameTag });
         return this;
     }
 
@@ -250,10 +244,7 @@ export class CS2Inventory {
         this.items.delete(stickerUid);
         this.add({
             id,
-            stickers: { [slot]: { id: sticker.id }},
-            sellable: true,
-            tradable: true,
-            recyclable: true});
+            stickers: { [slot]: { id: sticker.id }}});
         return this;
     }
 
@@ -308,10 +299,7 @@ export class CS2Inventory {
         this.add({
             ...unlockedItem.attributes,
             id: unlockedItem.id,
-            updatedAt: getTimestamp(),
-            sellable: true,
-            tradable: true,
-            recyclable: true
+            updatedAt: getTimestamp()
         });
         return this;
     }
