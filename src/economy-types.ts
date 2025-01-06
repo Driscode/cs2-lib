@@ -105,6 +105,9 @@ export interface CS2UnlockedItem {
         seed: number | undefined;
         statTrak: number | undefined;
         wear: number | undefined;
+        sellable: boolean | undefined;
+        tradable: boolean | undefined;
+        recyclable: boolean | undefined;
     };
     id: number;
     rarity: CS2RaritySoundNameValues;
