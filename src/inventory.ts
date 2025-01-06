@@ -39,6 +39,9 @@ export interface CS2BaseInventoryItem {
         }
     >;
     storage?: Record<number, CS2BaseInventoryItem>;
+    sellable?: boolean;
+    tradable?: boolean;
+    recyclable?: boolean;
     updatedAt?: number;
     wear?: number;
     price?: number; 
@@ -208,7 +211,10 @@ export class CS2Inventory {
                     equipped: undefined,
                     equippedCT: undefined,
                     equippedT: undefined,
-                    updatedAt: getTimestamp()
+                    updatedAt: getTimestamp(),
+                    sellable: true,
+                    tradable: true,
+                    recyclable: true,
                 }),
                 economyItem
             )
@@ -232,7 +238,10 @@ export class CS2Inventory {
         this.get(nameTagUid).expectNameTag();
         this.economy.requireNametag(nameTag);
         this.items.delete(nameTagUid);
-        this.add({ id, nameTag });
+        this.add({ id, nameTag,
+            sellable: true,
+            tradable: true,
+            recyclable: true, });
         return this;
     }
 
@@ -241,8 +250,10 @@ export class CS2Inventory {
         this.items.delete(stickerUid);
         this.add({
             id,
-            stickers: { [slot]: { id: sticker.id } }
-        });
+            stickers: { [slot]: { id: sticker.id }},
+            sellable: true,
+            tradable: true,
+            recyclable: true});
         return this;
     }
 
@@ -297,7 +308,10 @@ export class CS2Inventory {
         this.add({
             ...unlockedItem.attributes,
             id: unlockedItem.id,
-            updatedAt: getTimestamp()
+            updatedAt: getTimestamp(),
+            sellable: true,
+            tradable: true,
+            recyclable: true
         });
         return this;
     }
@@ -551,6 +565,9 @@ export class CS2InventoryItem
           >
         | undefined;
     storage: Map<number, CS2InventoryItem> | undefined;
+    sellable: boolean | undefined;
+    tradable: boolean | undefined;
+    recyclable: boolean | undefined;
     updatedAt: number | undefined;
     wear: number | undefined;
     price: number | undefined; 
@@ -675,7 +692,10 @@ export class CS2InventoryItem
             updatedAt: this.updatedAt,
             wear: this.wear,
             price: this.price,
-            userId: this.userId
+            userId: this.userId,
+            sellable: this.sellable !== undefined ? this.sellable : undefined,
+            tradable: this.tradable !== undefined ? this.tradable : undefined,
+            recyclable: this.recyclable !== undefined ? this.recyclable : undefined,
         } satisfies Interface<CS2BaseInventoryItem>;
     }
 }
