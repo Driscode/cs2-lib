@@ -137,7 +137,7 @@ export class CS2Inventory {
             return;
         }
         assert(item === undefined || item.hasKeychain());
-        this.economy.getById(keychain.id).expectSticker();
+        this.economy.getById(keychain.id).expectKeychain();
     }
 
     private validatePatches(patches?: CS2BaseInventoryItem["patches"], item?: CS2EconomyItem): void {
