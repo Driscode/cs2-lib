@@ -429,6 +429,20 @@ export class CS2Inventory {
         return this;
     }
 
+    applyItemKeychain(targetUid: number, keychainUid: number, coords: {x: number; y: number; z: number}): this {
+        const target = this.get(targetUid);
+        const keychain = this.get(keychainUid);
+        assert(target.hasStickers());
+        keychain.expectKeychain();
+        target.keychain = keychain;
+        target.keychain.x = coords.x;
+        target.keychain.y = coords.y;
+        target.keychain.z = coords.z;
+        target.updatedAt = getTimestamp();
+        this.items.delete(keychainUid);
+        return this;
+    }
+
     scrapeItemSticker(targetUid: number, slot: number): this {
         const target = this.get(targetUid);
         assert(target.stickers !== undefined);
@@ -467,6 +481,14 @@ export class CS2Inventory {
         if (target.patches.size === 0) {
             target.patches = undefined;
         }
+        target.updatedAt = getTimestamp();
+        return this;
+    }
+
+    removeItemKeychain(targetUid: number): this {
+        const target = this.get(targetUid);
+        assert(target.keychain !== undefined);
+        target.keychain = undefined;
         target.updatedAt = getTimestamp();
         return this;
     }

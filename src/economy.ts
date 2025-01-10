@@ -523,6 +523,10 @@ export class CS2EconomyItem
         assert(this.isSticker());
         return this;
     }
+    expectKeychain(): this {
+        assert(this.isKeychain());
+        return this;
+    }
 
     expectStorageUnit(): this {
         assert(this.isStorageUnit());
