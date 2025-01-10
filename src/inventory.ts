@@ -434,10 +434,13 @@ export class CS2Inventory {
         const keychain = this.get(keychainUid);
         assert(target.hasKeychain());
         keychain.expectKeychain();
-        target.keychain = keychain;
-        target.keychain.x = coords.x;
-        target.keychain.y = coords.y;
-        target.keychain.z = coords.z;
+        target.keychain = {
+            id: keychain.id,
+            seed: keychain.seed,
+            x: coords.x,
+            y: coords.y,
+            z: coords.z,
+        };
         target.updatedAt = getTimestamp();
         this.items.delete(keychainUid);
         return this;
