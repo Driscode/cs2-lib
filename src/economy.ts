@@ -37,7 +37,7 @@ import {
     CS2_TEAMS_BOTH,
     CS2_TEAMS_CT,
     CS2_TEAMS_T,
-    CS2_WEAR_FACTOR
+    CS2_WEAR_FACTOR, CS2_KEYCHAINABLE_ITEMS
 } from "./economy-constants.js";
 import {
     CS2RarityColorName,
@@ -461,6 +461,10 @@ export class CS2EconomyItem
         return this.type === CS2ItemType.Graffiti;
     }
 
+    isKeychain(): boolean {
+        return this.type === CS2ItemType.Keychain;
+    }
+
     isMelee(): boolean {
         return this.type === CS2ItemType.Melee;
     }
@@ -555,6 +559,9 @@ export class CS2EconomyItem
 
     hasStickers(): boolean {
         return CS2_STICKERABLE_ITEMS.includes(this.type) && !this.isC4();
+    }
+    hasKeychain(): boolean {
+        return CS2_KEYCHAINABLE_ITEMS.includes(this.type) && !this.isC4();
     }
 
     hasPatches(): boolean {

@@ -38,6 +38,13 @@ export interface CS2BaseInventoryItem {
             y?: number;
         }
     >;
+    keychain?: {
+        id: number;
+        seed?: number;
+        x?: number;
+        y?: number;
+        Z?: number;
+    };
     storage?: Record<number, CS2BaseInventoryItem>;
     sellable?: boolean;
     tradable?: boolean;
@@ -66,7 +73,7 @@ export interface CS2InventorySpec extends CS2InventoryOptions {
 export const CS2_INVENTORY_VERSION = 1;
 export const CS2_INVENTORY_TIMESTAMP = 1707696138408;
 // prettier-ignore
-export const CS2_INVENTORY_EQUIPPABLE_ITEMS: CS2ItemTypeValues[] = [CS2ItemType.Agent, CS2ItemType.Collectible, CS2ItemType.Gloves, CS2ItemType.Graffiti, CS2ItemType.Melee, CS2ItemType.MusicKit, CS2ItemType.Weapon];
+export const CS2_INVENTORY_EQUIPPABLE_ITEMS: CS2ItemTypeValues[] = [CS2ItemType.Agent, CS2ItemType.Collectible, CS2ItemType.Gloves, CS2ItemType.Graffiti, CS2ItemType.Keychain, CS2ItemType.Melee, CS2ItemType.MusicKit, CS2ItemType.Weapon];
 
 export function getTimestamp(): number {
     return Math.ceil((Date.now() - CS2_INVENTORY_TIMESTAMP) / 1000);
@@ -125,6 +132,14 @@ export class CS2Inventory {
         }
     }
 
+    private validateKeychain(keychain: CS2BaseInventoryItem["keychain"], item?: CS2EconomyItem): void {
+        if (keychain === undefined) {
+            return;
+        }
+        assert(item === undefined || item.hasKeychain());
+        this.economy.getById(keychain.id).expectSticker();
+    }
+
     private validatePatches(patches?: CS2BaseInventoryItem["patches"], item?: CS2EconomyItem): void {
         if (patches === undefined) {
             return;
@@ -160,8 +175,8 @@ export class CS2Inventory {
         patches,
         seed,
         statTrak,
-        stickers,
-        wear
+        stickers, keychain,
+        wear,
     }: CS2BaseInventoryItem): void {
         const item = this.economy.getById(id);
         this.economy.validateWear(wear, item);
@@ -171,6 +186,7 @@ export class CS2Inventory {
         this.validateAddable(item);
         this.validatePatches(patches, item);
         this.validateStickers(stickers, item);
+        this.validateKeychain(keychain, item)
     }
 
     private toInventoryItems(items: Record<number, CS2BaseInventoryItem>): Map<number, CS2InventoryItem> {
@@ -531,7 +547,7 @@ export class CS2Inventory {
 
 export class CS2InventoryItem
     extends CS2EconomyItem
-    implements Interface<Omit<CS2BaseInventoryItem, "patches" | "stickers" | "storage">>
+    implements Interface<Omit<CS2BaseInventoryItem, "patches" | "stickers" | "storage" | "keychain">>
 {
     containerId: number | undefined;
     equipped: boolean | undefined;
@@ -552,6 +568,13 @@ export class CS2InventoryItem
               }
           >
         | undefined;
+    keychain: {
+        id: number;
+        seed?: number;
+        x?: number;
+        y?: number;
+        z?: number;
+    } | undefined
     storage: Map<number, CS2InventoryItem> | undefined;
     sellable: boolean | undefined;
     tradable: boolean | undefined;
@@ -684,6 +707,7 @@ export class CS2InventoryItem
             sellable: this.sellable !== undefined ? this.sellable : undefined,
             tradable: this.tradable !== undefined ? this.tradable : undefined,
             recyclable: this.recyclable !== undefined ? this.recyclable : undefined,
+            keychain: this.keychain !== undefined ? this.keychain : undefined
         } satisfies Interface<CS2BaseInventoryItem>;
     }
 }
