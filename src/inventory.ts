@@ -432,7 +432,7 @@ export class CS2Inventory {
     applyItemKeychain(targetUid: number, keychainUid: number, coords: {x: number; y: number; z: number}): this {
         const target = this.get(targetUid);
         const keychain = this.get(keychainUid);
-        assert(target.hasStickers());
+        assert(target.hasKeychain());
         keychain.expectKeychain();
         target.keychain = keychain;
         target.keychain.x = coords.x;
