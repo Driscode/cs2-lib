@@ -696,10 +696,17 @@ export class CS2EconomyItem
             const slotTournamentSticker = randomInt(0, stickers?.size-1)
             if (stickers?.get(slotTournamentSticker) !== undefined) {
                 const sticker = stickers?.get(slotTournamentSticker)
-                console.log(sticker)
                 if (sticker !== undefined) sticker.id = this.guaranteedSouvenirSticker
             }
         }
+        const stickers3: any = this.possibleSouvenirStickers !== undefined && this.guaranteedSouvenirSticker !== undefined ? Object.fromEntries(new Map(
+                Object.entries(getRandom(this.possibleSouvenirStickers, randomInt(1, 3)))
+                    .filter(([, id]) => this.economy.items.has(id))
+                    .map(([slot, sticker]) => [parseInt(slot, 10), {
+                        id: sticker,
+                    }]))) : undefined;
+        if (stickers !== undefined) console.log(Object.fromEntries(stickers))
+        console.log(stickers3)
 
         return {
             attributes: {
@@ -719,8 +726,8 @@ export class CS2EconomyItem
                               .substring(0, CS2_WEAR_FACTOR.toString().length)
                       )
                     : undefined,
-                stickers: stickers !== undefined ? Object.fromEntries(stickers) : undefined,
             },
+            stickers: stickers !== undefined ? Object.fromEntries(stickers) : undefined,
             souvenir: this.possibleSouvenirStickers !== undefined ? true : undefined,
             id: unlocked.id,
             rarity: CS2RaritySoundName[unlocked.rarity],

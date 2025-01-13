@@ -107,20 +107,20 @@ export interface CS2UnlockedItem {
         containerId: number;
         seed: number | undefined;
         statTrak: number | undefined;
-        stickers: Record<
-            string,
-            {
-                id: number;
-                wear?: number;
-                x?: number;
-                y?: number;
-            }
-        > | undefined;
         wear: number | undefined;
         sellable?: boolean | undefined;
         tradable?: boolean | undefined;
         recyclable?: boolean | undefined;
     };
+    stickers: Record<
+        string,
+        {
+            id: number;
+            wear?: number;
+            x?: number;
+            y?: number;
+        }
+    > | undefined;
     souvenir: boolean | undefined;
     id: number;
     rarity: CS2RaritySoundNameValues;
