@@ -51,6 +51,7 @@ export interface CS2BaseInventoryItem {
             y?: number;
         }
     >;
+    souvenir?: boolean;
     storage?: Record<number, CS2BaseInventoryItem>;
     sellable?: boolean;
     tradable?: boolean;

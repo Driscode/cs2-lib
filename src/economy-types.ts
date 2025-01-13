@@ -121,6 +121,7 @@ export interface CS2UnlockedItem {
         tradable?: boolean | undefined;
         recyclable?: boolean | undefined;
     };
+    souvenir: boolean | undefined;
     id: number;
     rarity: CS2RaritySoundNameValues;
     special: boolean;

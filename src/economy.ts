@@ -710,6 +710,7 @@ export class CS2EconomyItem
                         }])
                 )) : undefined,
             },
+            souvenir: this.possibleSouvenirStickers !== undefined ? true : undefined,
             id: unlocked.id,
             rarity: CS2RaritySoundName[unlocked.rarity],
             special: rollRarity === "special"
