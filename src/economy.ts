@@ -682,7 +682,7 @@ export class CS2EconomyItem
         }
         const stack = ensure(contents[rollRarity]);
         const unlocked = ensure(stack[Math.floor(Math.random() * stack.length)]);
-        const hasStatTrak = this.statTrakless !== true;
+        const hasStatTrak = this.statTrakless !== true && this.possibleSouvenirStickers === undefined;
         const alwaysStatTrak = this.statTrakOnly === true;
         return {
             attributes: {
