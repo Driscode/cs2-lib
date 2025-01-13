@@ -893,8 +893,7 @@ export class ItemGenerator {
         ] of Object.entries(this.gameItems.items)) {
             const hasSupplyCrateSeries =
                 attributes?.["set supply crate series"]?.attribute_class === "supply_crate_series";
-            const hasTournamentEventId =
-                attributes?.["tournament event id"]?.attribute_class === "tournament_event_id";
+
             if (
                 item_name === undefined ||
                 image_inventory === undefined ||
@@ -947,6 +946,8 @@ export class ItemGenerator {
                     name.includes("selfopeningitem") ||
                     prefab?.includes("selfopening")
                 );
+                const hasSouvenirStickers =
+                    (attributes?.["tournament event id"]?.attribute_class === "tournament_event_id" && !isNaN(Number(attributes?.["tournament event id"].value)) && Number(attributes?.["tournament event id"].value) >= 0 && (prefab === "weapon_case_souvenirpkg" || thePrefab?.prefab === "weapon_case_souvenirpkg"))
                 const keys = Object.keys(associated_items ?? {}).map((keyItemDef) => {
                     if (keyItems.has(keyItemDef)) {
                         return ensure(keyItems.get(keyItemDef));
@@ -985,7 +986,7 @@ export class ItemGenerator {
                     keys: keys.length > 0 ? keys : undefined,
                     rarity: this.getRarityColorHex(["common"]),
                     specials: this.itemManager.get(id)?.specials ?? specials,
-                    possibleStickers: hasTournamentEventId ? this.getSouvenirStickers(attributes?.["tournament event id"].value) : undefined,
+                    possibleStickers: hasSouvenirStickers ? this.getSouvenirStickers(attributes?.["tournament event id"]?.value ?? "") : undefined,
                     specialsImage: this.getSpecialsImage(id, image_unusual_item),
                     statTrakless: containsMusicKit && !containsStatTrak ? true : undefined,
                     statTrakOnly: containsMusicKit && containsStatTrak ? true : undefined,
@@ -1404,7 +1405,7 @@ export class ItemGenerator {
         ] of Object.entries(this.gameItems.sticker_kits)) {
             if (tournament_event_id === selected_tournament_event_id) {
                 const id = this.itemIdentifierManager.allIdentifiers.indexOf(`sticker_${index}`);
-                souvenirStickers.push(id)
+                if (id >= 0) souvenirStickers.push(id)
             }
         }
         return souvenirStickers
