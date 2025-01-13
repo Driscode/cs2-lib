@@ -333,6 +333,7 @@ export class CS2Inventory {
         this.add({
             ...unlockedItem.attributes,
             stickers: unlockedItem.stickers,
+            souvenir: unlockedItem.souvenir,
             id: unlockedItem.id,
             updatedAt: getTimestamp()
         });
