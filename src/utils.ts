@@ -16,6 +16,8 @@ export type Interface<T extends object> = {
 
 export type MapValue<T> = T extends Map<any, infer I> ? I : never;
 
+export type RecordValue<T> = T extends Record<any, infer I> ? I : never;
+
 export function compare<T, U>(var1: T, var2: U): boolean {
     return var1 === undefined || var1 === (typeof var1 === "boolean" ? var2 || false : var2);
 }
@@ -24,8 +26,8 @@ export function float(literal: number, fractionDigits: number = 2): number {
     return parseFloat(literal.toFixed(fractionDigits));
 }
 
-export function ensure<T>(value: T): NonNullable<T> {
-    assert(value !== undefined && value !== null);
+export function ensure<T>(value: T, message?: string): NonNullable<T> {
+    assert(value !== undefined && value !== null, message);
     return value;
 }
 

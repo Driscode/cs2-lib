@@ -4,20 +4,23 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
+    CS2_MAX_KEYCHAINS,
+    CS2_MAX_KEYCHAIN_SEED,
     CS2_MAX_PATCHES,
     CS2_MAX_STATTRAK,
     CS2_MAX_STICKERS,
     CS2_MAX_STICKER_WEAR,
     CS2_MAX_WEAR,
+    CS2_MIN_KEYCHAIN_SEED,
     CS2_MIN_STICKER_WEAR,
     CS2_MIN_WEAR,
     CS2_STICKER_WEAR_FACTOR
 } from "./economy-constants.js";
-import { CS2ItemType, CS2ItemTypeValues, CS2UnlockedItem } from "./economy-types.js";
+import { CS2ItemType, type CS2ItemTypeValues, type CS2UnlockedItem } from "./economy-types.js";
 import { CS2Economy, CS2EconomyInstance, CS2EconomyItem } from "./economy.js";
 import { resolveInventoryData } from "./inventory-upgrader.js";
-import { CS2Team, CS2TeamValues } from "./teams.js";
-import { Interface, MapValue, assert, ensure, float } from "./utils.js";
+import { CS2Team, type CS2TeamValues } from "./teams.js";
+import { type Interface, type MapValue, type RecordValue, assert, ensure, float } from "./utils.js";
 
 export interface CS2BaseInventoryItem {
     containerId?: number;
@@ -25,6 +28,15 @@ export interface CS2BaseInventoryItem {
     equippedCT?: boolean;
     equippedT?: boolean;
     id: number;
+    keychains?: Record<
+        string,
+        {
+            id: number;
+            seed?: number;
+            x?: number;
+            y?: number;
+        }
+    >;
     nameTag?: string;
     patches?: Record<string, number>;
     seed?: number;
@@ -38,13 +50,6 @@ export interface CS2BaseInventoryItem {
             y?: number;
         }
     >;
-    keychain?: {
-        id: number;
-        seed?: number;
-        x?: number;
-        y?: number;
-        Z?: number;
-    };
     storage?: Record<number, CS2BaseInventoryItem>;
     sellable?: boolean;
     tradable?: boolean;
@@ -132,12 +137,22 @@ export class CS2Inventory {
         }
     }
 
-    private validateKeychain(keychain: CS2BaseInventoryItem["keychain"], item?: CS2EconomyItem): void {
-        if (keychain === undefined) {
+    private validateKeychains(keychains?: CS2BaseInventoryItem["keychains"], item?: CS2EconomyItem): void {
+        if (keychains === undefined) {
             return;
         }
-        assert(item === undefined || item.hasKeychain());
-        this.economy.getById(keychain.id).expectKeychain();
+        const entries = Object.entries(keychains);
+        assert(entries.length <= CS2_MAX_KEYCHAINS);
+        assert(item === undefined || item.hasKeychains());
+        for (const [key, { id: keychainId, seed }] of entries) {
+            const slot = parseInt(key, 10);
+            assert(slot >= 0 && slot <= CS2_MAX_KEYCHAINS - 1);
+            this.economy.getById(keychainId).expectKeychain();
+            if (seed !== undefined) {
+                assert(!Number.isNaN(seed));
+                assert(seed >= CS2_MIN_KEYCHAIN_SEED && seed <= CS2_MAX_KEYCHAIN_SEED);
+            }
+        }
     }
 
     private validatePatches(patches?: CS2BaseInventoryItem["patches"], item?: CS2EconomyItem): void {
@@ -171,11 +186,12 @@ export class CS2Inventory {
 
     public validateBaseInventoryItem({
         id,
+        keychains,
         nameTag,
         patches,
         seed,
         statTrak,
-        stickers, keychain,
+        stickers,
         wear,
     }: CS2BaseInventoryItem): void {
         const item = this.economy.getById(id);
@@ -186,7 +202,7 @@ export class CS2Inventory {
         this.validateAddable(item);
         this.validatePatches(patches, item);
         this.validateStickers(stickers, item);
-        this.validateKeychain(keychain, item)
+        this.validateKeychains(keychains, item)
     }
 
     private toInventoryItems(items: Record<number, CS2BaseInventoryItem>): Map<number, CS2InventoryItem> {
@@ -429,18 +445,21 @@ export class CS2Inventory {
         return this;
     }
 
-    applyItemKeychain(targetUid: number, keychainUid: number, coords: {x: number; y: number; z: number}): this {
+    applyItemKeychain(targetUid: number, keychainUid: number, slot: number, coords: {x: number; y: number; z: number}): this {
+        assert(slot >= 0 && slot <= CS2_MAX_PATCHES - 1);
         const target = this.get(targetUid);
         const keychain = this.get(keychainUid);
-        assert(target.hasKeychain());
+        assert(target.hasKeychains());
         keychain.expectKeychain();
-        target.keychain = {
+        target.keychains ??= new Map();
+        assert(target.keychains.get(slot) === undefined);
+        target.keychains.set(slot, {
             id: keychain.id,
             seed: keychain.seed,
             x: coords.x,
             y: coords.y,
             z: coords.z,
-        };
+        });
         target.updatedAt = getTimestamp();
         this.items.delete(keychainUid);
         return this;
@@ -488,10 +507,14 @@ export class CS2Inventory {
         return this;
     }
 
-    removeItemKeychain(targetUid: number): this {
+    removeItemKeychain(targetUid: number, slot: number): this {
         const target = this.get(targetUid);
-        assert(target.keychain !== undefined);
-        target.keychain = undefined;
+        assert(target.keychains !== undefined);
+        assert(target.keychains.get(slot) !== undefined);
+        target.keychains.delete(slot);
+        if (target.keychains.size === 0) {
+            target.keychains = undefined;
+        }
         target.updatedAt = getTimestamp();
         return this;
     }
@@ -572,34 +595,18 @@ export class CS2Inventory {
 
 export class CS2InventoryItem
     extends CS2EconomyItem
-    implements Interface<Omit<CS2BaseInventoryItem, "patches" | "stickers" | "storage" | "keychain">>
+    implements Interface<Omit<CS2BaseInventoryItem, "keychains" | "patches" | "stickers" | "storage">>
 {
     containerId: number | undefined;
     equipped: boolean | undefined;
     equippedCT: boolean | undefined;
     equippedT: boolean | undefined;
+    keychains: Map<number, RecordValue<CS2BaseInventoryItem["keychains"]>> | undefined;
     nameTag: string | undefined;
     patches: Map<number, number> | undefined;
     seed: number | undefined;
     statTrak: number | undefined;
-    stickers:
-        | Map<
-              number,
-              {
-                  id: number;
-                  wear?: number;
-                  x?: number;
-                  y?: number;
-              }
-          >
-        | undefined;
-    keychain: {
-        id: number;
-        seed?: number;
-        x?: number;
-        y?: number;
-        z?: number;
-    } | undefined
+    stickers: Map<number, RecordValue<CS2BaseInventoryItem["stickers"]>> | undefined;
     storage: Map<number, CS2InventoryItem> | undefined;
     sellable: boolean | undefined;
     tradable: boolean | undefined;
@@ -609,11 +616,12 @@ export class CS2InventoryItem
     price: number | undefined; 
     userId: string | undefined;
 
-    private assign({ patches, stickers, storage }: Partial<CS2BaseInventoryItem>): void {
+    private assign({ keychains, patches, stickers, storage }:
+Partial<CS2BaseInventoryItem>): void {
         if (patches !== undefined) {
             this.patches = new Map(
                 Object.entries(patches)
-                    .filter(([, patchId]) => this.economy.items.has(patchId))
+                    .filter(([, { id }]) => this.economy.items.has(id))
                     .map(([slot, patchId]) => [parseInt(slot, 10), patchId])
             );
         }
@@ -622,6 +630,13 @@ export class CS2InventoryItem
                 Object.entries(stickers)
                     .filter(([, sticker]) => this.economy.items.has(sticker.id))
                     .map(([slot, sticker]) => [parseInt(slot, 10), sticker])
+            );
+        }
+        if (keychains !== undefined) {
+            this.keychains = new Map(
+                Object.entries(keychains)
+                    .filter(([, { id }]) => this.economy.items.has(id))
+                    .map(([slot, keychain]) => [parseInt(slot, 10), keychain])
             );
         }
         if (storage !== undefined) {
@@ -678,6 +693,25 @@ export class CS2InventoryItem
         return this.stickers?.size ?? 0;
     }
 
+    allKeychains(): [number, MapValue<CS2InventoryItem["keychains"]> | undefined][] {
+        const entries: [number, MapValue<CS2InventoryItem["keychains"]> | undefined][] = [];
+        for (let slot = 0; slot < CS2_MAX_KEYCHAINS; slot++) {
+            const keychain = this.keychains?.get(slot);
+            entries.push([slot, keychain]);
+        }
+        return entries;
+    }
+
+    someKeychains(): [number, MapValue<CS2InventoryItem["keychains"]>][] {
+        return this.allKeychains().filter(
+            (value): value is [number, MapValue<CS2InventoryItem["keychains"]>] => value[1] !== undefined
+        );
+    }
+
+    getKeychainsCount(): number {
+        return this.keychains?.size ?? 0;
+    }
+
     allPatches(): [number, number | undefined][] {
         const entries: [number, number | undefined][] = [];
         for (let slot = 0; slot < CS2_MAX_PATCHES; slot++) {
@@ -706,9 +740,15 @@ export class CS2InventoryItem
     getPrice(): number {
         return this.price ?? 0;
     }
+
     getUserId(): string {
         return this.userId ?? "1";
     }
+
+    getKeychainSeed(slot: number): number {
+        return this.keychains?.get(slot)?.seed ?? CS2_MIN_KEYCHAIN_SEED;
+    }
+
     asBase(): CS2BaseInventoryItem {
         return {
             containerId: this.containerId,
@@ -732,7 +772,7 @@ export class CS2InventoryItem
             sellable: this.sellable !== undefined ? this.sellable : undefined,
             tradable: this.tradable !== undefined ? this.tradable : undefined,
             recyclable: this.recyclable !== undefined ? this.recyclable : undefined,
-            keychain: this.keychain !== undefined ? this.keychain : undefined
+            keychains: this.keychains !== undefined ? Object.fromEntries(this.keychains) : undefined,
         } satisfies Interface<CS2BaseInventoryItem>;
     }
 }

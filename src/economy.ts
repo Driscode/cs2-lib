@@ -9,6 +9,7 @@ import {
     CS2_DISPLAY_ITEMS,
     CS2_EQUIPMENT_ITEMS,
     CS2_GRAPHIC_ART_ITEMS,
+    CS2_KEYCHAINABLE_ITEMS,
     CS2_MACHINEGUN_MODELS,
     CS2_MAX_FACTORY_NEW_WEAR,
     CS2_MAX_FIELD_TESTED_WEAR,
@@ -37,12 +38,12 @@ import {
     CS2_TEAMS_BOTH,
     CS2_TEAMS_CT,
     CS2_TEAMS_T,
-    CS2_WEAR_FACTOR, CS2_KEYCHAINABLE_ITEMS
+    CS2_WEAR_FACTOR
 } from "./economy-constants.js";
 import {
     CS2RarityColorName,
     CS2RarityColorOrder,
-    CS2RarityColorValues,
+    type CS2RarityColorValues,
     CS2RaritySoundName,
     CS2_BASE_ODD,
     CS2_RARITY_COLOR_DEFAULT,
@@ -53,20 +54,20 @@ import {
 } from "./economy-container.js";
 import {
     CS2ContainerType,
-    CS2ContainerTypeValues,
-    CS2Item,
-    CS2ItemLocalization,
-    CS2ItemLocalizationMap,
+    type CS2ContainerTypeValues,
+    type CS2Item,
+    type CS2ItemLocalization,
+    type CS2ItemLocalizationMap,
     CS2ItemTeam,
-    CS2ItemTeamValues,
+    type CS2ItemTeamValues,
     CS2ItemType,
-    CS2ItemTypeValues,
+    type CS2ItemTypeValues,
     CS2ItemWear,
-    CS2ItemWearValues,
-    CS2UnlockedItem
+    type CS2ItemWearValues,
+    type CS2UnlockedItem
 } from "./economy-types.js";
-import { CS2TeamValues } from "./teams.js";
-import { Interface, assert, compare, ensure, safe } from "./utils.js";
+import { type CS2TeamValues } from "./teams.js";
+import { type Interface, assert, compare, ensure, safe } from "./utils.js";
 
 type CS2EconomyItemPredicate = Partial<CS2EconomyItem> & { team?: CS2TeamValues };
 
@@ -336,10 +337,9 @@ export class CS2EconomyItem
         Object.assign(this, item);
         Object.assign(this, language);
         assert(typeof this.id === "number");
-        assert(typeof this.id === "number");
         assert(this.name);
         assert(this.type);
-        assert(item.type === CS2ItemType.Stub || this.rarity);
+        assert(item.type === CS2ItemType.Stub || typeof this.rarity === "string");
     }
 
     set contents(value: number[] | undefined) {
@@ -564,7 +564,8 @@ export class CS2EconomyItem
     hasStickers(): boolean {
         return CS2_STICKERABLE_ITEMS.includes(this.type) && !this.isC4();
     }
-    hasKeychain(): boolean {
+
+    hasKeychains(): boolean {
         return CS2_KEYCHAINABLE_ITEMS.includes(this.type) && !this.isC4();
     }
 
@@ -666,9 +667,9 @@ export class CS2EconomyItem
         const rarities = CS2_RARITY_ORDER.filter((rarity) => keys.includes(rarity));
         const odds = options?.computeOdds?.(rarities) ?? rarities.map((_, index) => CS2_BASE_ODD / Math.pow(5, index));
         const total = odds.reduce((acc, cur) => acc + cur, 0);
-        const entries = rarities.map((rarity, index) => [rarity, odds[index] / total] as const);
+        const entries = rarities.map((rarity, index) => [rarity, ensure(odds[index]) / total] as const);
         const roll = Math.random();
-        let [rollRarity] = entries[0];
+        let [rollRarity] = ensure(entries[0]);
         let acc = 0;
         for (const [rarity, odd] of entries) {
             acc += odd;
@@ -677,7 +678,8 @@ export class CS2EconomyItem
                 break;
             }
         }
-        const unlocked = contents[rollRarity][Math.floor(Math.random() * contents[rollRarity].length)];
+        const stack = ensure(contents[rollRarity]);
+        const unlocked = ensure(stack[Math.floor(Math.random() * stack.length)]);
         const hasStatTrak = this.statTrakless !== true;
         const alwaysStatTrak = this.statTrakOnly === true;
         return {

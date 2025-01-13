@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2ItemType, CS2ItemTypeValues } from "./economy-types.js";
-import { CS2Team, CS2TeamValues } from "./teams.js";
+import { CS2ItemType, type CS2ItemTypeValues } from "./economy-types.js";
+import { CS2Team, type CS2TeamValues } from "./teams.js";
 
 export const CS2_MIN_STATTRAK = 0;
 export const CS2_MAX_STATTRAK = 999999;
@@ -27,8 +27,11 @@ export const CS2_MIN_SEED = 1;
 export const CS2_MAX_SEED = 1000;
 export const CS2_MIN_STICKER_WEAR = 0;
 export const CS2_MAX_STICKER_WEAR = 0.9;
+export const CS2_MIN_KEYCHAIN_SEED = 1;
+export const CS2_MAX_KEYCHAIN_SEED = 100000;
 export const CS2_MAX_STICKERS = 5;
 export const CS2_MAX_PATCHES = 5;
+export const CS2_MAX_KEYCHAINS = 1;
 
 export const CS2_STICKER_WEAR_FACTOR = 0.1;
 export const CS2_WEAR_FACTOR = 0.000001;

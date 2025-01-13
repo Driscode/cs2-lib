@@ -23,6 +23,7 @@ export const CS2ItemType = {
     Gloves: "glove",
     Graffiti: "graffiti",
     Key: "key",
+    Keychain: "keychain",
     Melee: "melee",
     MusicKit: "musickit",
     Patch: "patch",
@@ -30,7 +31,6 @@ export const CS2ItemType = {
     Stub: "stub",
     Tool: "tool",
     Weapon: "weapon",
-    Keychain: "keychain",
 } as const;
 
 export type CS2ItemTypeValues = EnumValues<typeof CS2ItemType>;
