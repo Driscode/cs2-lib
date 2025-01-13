@@ -610,6 +610,7 @@ export class CS2InventoryItem
     statTrak: number | undefined;
     stickers: Map<number, RecordValue<CS2BaseInventoryItem["stickers"]>> | undefined;
     storage: Map<number, CS2InventoryItem> | undefined;
+    souvenir: boolean | undefined;
     sellable: boolean | undefined;
     tradable: boolean | undefined;
     recyclable: boolean | undefined;
