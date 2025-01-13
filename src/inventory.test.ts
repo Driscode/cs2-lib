@@ -255,6 +255,7 @@ describe("CS2Inventory methods", () => {
         const unlocked1 = CS2Economy.getById(ESL_ONE_COLOGNE_2014_DUST_II_SOUVENIR_ID).unlockContainer();
         expect(() => inventory.unlockContainer(unlocked1, 0, 2)).toThrow();
         inventory.unlockContainer(unlocked1, 0); // uid:0
+        console.log(inventory.get(0).stickers)
         expect(inventory.size()).toBe(3);
         const result1 = inventory.get(0);
         expect(result1.containerId).toBe(unlocked1.attributes.containerId);
