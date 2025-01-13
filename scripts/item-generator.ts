@@ -203,8 +203,6 @@ export class ItemGenerator {
 
         this.paintKitsRaritiesColorHexCustom = Object.fromEntries(
             Object.entries(this.gameItemsCustom.paint_kits_rarity).map(([paintKitKey, rarityKey]) => {
-                console.log(paintKitKey);
-                console.log(rarityKey);
                 return [paintKitKey, this.raritiesColorHex[rarityKey]] as const;
             }));
         this.paintKitsCustom = Object.entries(this.gameItemsCustom.paint_kits)
@@ -895,6 +893,8 @@ export class ItemGenerator {
         ] of Object.entries(this.gameItems.items)) {
             const hasSupplyCrateSeries =
                 attributes?.["set supply crate series"]?.attribute_class === "supply_crate_series";
+            const hasTournamentEventId =
+                attributes?.["tournament event id"]?.attribute_class === "tournament_event_id";
             if (
                 item_name === undefined ||
                 image_inventory === undefined ||
@@ -985,6 +985,7 @@ export class ItemGenerator {
                     keys: keys.length > 0 ? keys : undefined,
                     rarity: this.getRarityColorHex(["common"]),
                     specials: this.itemManager.get(id)?.specials ?? specials,
+                    possibleStickers: hasTournamentEventId ? this.getSouvenirStickers(attributes?.["tournament event id"].value) : undefined,
                     specialsImage: this.getSpecialsImage(id, image_unusual_item),
                     statTrakless: containsMusicKit && !containsStatTrak ? true : undefined,
                     statTrakOnly: containsMusicKit && containsStatTrak ? true : undefined,
@@ -1394,6 +1395,19 @@ export class ItemGenerator {
             category = "Valve";
         }
         return [ensure(category), categoryToken] as const;
+    }
+    private getSouvenirStickers(selected_tournament_event_id?: string) {
+        const souvenirStickers: number[] = []
+        for (const [
+            index,
+            {tournament_event_id}
+        ] of Object.entries(this.gameItems.sticker_kits)) {
+            if (tournament_event_id === selected_tournament_event_id) {
+                const id = this.itemIdentifierManager.allIdentifiers.indexOf(`sticker_${index}`);
+                souvenirStickers.push(id)
+            }
+        }
+        return souvenirStickers
     }
 
     private getAgentVoPrefix(model: string, prefix?: string) {

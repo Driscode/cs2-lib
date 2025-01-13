@@ -69,6 +69,7 @@ export type CS2GameItems = {
                     };
                     ["pedestal display model"]?: string;
                     ["tournament event id"]?: {
+                        attribute_class?: string;
                         value: string;
                     };
                 };

@@ -299,6 +299,7 @@ export class CS2EconomyItem
     collection: string | undefined;
     collectionDesc: string | undefined;
     collectionName: string | undefined;
+    componentName: string | undefined;
     containerType: CS2ContainerTypeValues | undefined;
     def: number | undefined;
     desc: string | undefined;
@@ -312,7 +313,7 @@ export class CS2EconomyItem
     name: string = null!;
     rarity: CS2RarityColorValues = null!;
     parentPaintkitId: number | undefined;
-    componentName: string | undefined;
+    possibleStickers: number[] | undefined;
     specialsImage: boolean | undefined;
     statTrakless: boolean | undefined;
     statTrakOnly: boolean | undefined;
@@ -699,13 +700,33 @@ export class CS2EconomyItem
                               .toString()
                               .substring(0, CS2_WEAR_FACTOR.toString().length)
                       )
-                    : undefined
+                    : undefined,
+                stickers: this.possibleStickers !== undefined ? Object.fromEntries(new Map(
+                    Object.entries(getRandom(this.possibleStickers, randomInt(1, 4)))
+                        .filter(([, id]) => this.economy.items.has(id))
+                        .map(([slot, sticker]) => [parseInt(slot, 10), {
+                            id: sticker,
+                        }])
+                )) : undefined,
             },
             id: unlocked.id,
             rarity: CS2RaritySoundName[unlocked.rarity],
             special: rollRarity === "special"
         };
     }
+}
+function getRandom(arr: number[], n: number) {
+    var result = new Array(n),
+        len = arr.length,
+        taken = new Array(len);
+    if (n > len)
+        throw new RangeError("getRandom: more elements taken than available");
+    while (n--) {
+        var x = Math.floor(Math.random() * len);
+        result[n] = arr[x in taken ? taken[x] : x];
+        taken[x] = --len in taken ? taken[len] : len;
+    }
+    return result;
 }
 
 export const CS2Economy = new CS2EconomyInstance();

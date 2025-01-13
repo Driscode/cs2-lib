@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import type { CS2RarityColorValues, CS2RaritySoundNameValues } from "./economy-container.js";
-import type { EnumValues } from "./utils.js";
+import type {CS2RarityColorValues, CS2RaritySoundNameValues} from "./economy-container.js";
+import type {EnumValues} from "./utils.js";
 
 export const CS2ItemTeam = {
     T: 0,
@@ -61,6 +61,7 @@ export interface CS2Item {
     baseId?: number | undefined;
     category?: string | undefined;
     collection?: string | undefined;
+    componentName?: string | undefined;
     containerType?: CS2ContainerTypeValues | undefined;
     contents?: number[] | undefined;
     def?: number | undefined;
@@ -73,7 +74,7 @@ export interface CS2Item {
     model?: string | undefined;
     rarity?: CS2RarityColorValues | undefined;
     parentPaintkitId?: number | undefined;
-    componentName?: string | undefined;
+    possibleStickers?: number[] | undefined;
     specials?: number[] | undefined;
     specialsImage?: boolean | undefined;
     statTrakless?: boolean | undefined;
@@ -105,6 +106,15 @@ export interface CS2UnlockedItem {
         containerId: number;
         seed: number | undefined;
         statTrak: number | undefined;
+        stickers: Record<
+            string,
+            {
+                id: number;
+                wear?: number;
+                x?: number;
+                y?: number;
+            }
+        > | undefined;
         wear: number | undefined;
         sellable?: boolean | undefined;
         tradable?: boolean | undefined;
