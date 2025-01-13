@@ -153,6 +153,7 @@ export type CS2GameItems = {
                 patch_material?: string;
                 sticker_material: string;
                 tournament_event_id?: string;
+                tournament_team_id?: string;
             };
         };
         weapon_sets: {

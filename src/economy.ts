@@ -313,7 +313,8 @@ export class CS2EconomyItem
     name: string = null!;
     rarity: CS2RarityColorValues = null!;
     parentPaintkitId: number | undefined;
-    possibleStickers: number[] | undefined;
+    possibleSouvenirStickers: number[] | undefined;
+    guaranteedSouvenirSticker: number | undefined;
     specialsImage: boolean | undefined;
     statTrakless: boolean | undefined;
     statTrakOnly: boolean | undefined;
@@ -701,8 +702,8 @@ export class CS2EconomyItem
                               .substring(0, CS2_WEAR_FACTOR.toString().length)
                       )
                     : undefined,
-                stickers: this.possibleStickers !== undefined ? Object.fromEntries(new Map(
-                    Object.entries(getRandom(this.possibleStickers, randomInt(1, 4)))
+                stickers: this.possibleSouvenirStickers !== undefined && this.guaranteedSouvenirSticker !== undefined ? Object.fromEntries(new Map(
+                    Object.entries(getRandom(this.possibleSouvenirStickers.concat(this.guaranteedSouvenirSticker), randomInt(1, 3)))
                         .filter(([, id]) => this.economy.items.has(id))
                         .map(([slot, sticker]) => [parseInt(slot, 10), {
                             id: sticker,
