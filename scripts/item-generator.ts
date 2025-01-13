@@ -937,6 +937,7 @@ export class ItemGenerator {
                     associated_items !== undefined ||
                     prefab === "sticker_capsule" ||
                     prefab === "weapon_case_souvenirpkg" ||
+                    thePrefab?.prefab === "weapon_case_souvenirpkg" ||
                     tags?.StickerCapsule ||
                     name.includes("crate_signature") ||
                     name.includes("crate_pins") ||
