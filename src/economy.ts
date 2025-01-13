@@ -685,7 +685,7 @@ export class CS2EconomyItem
         const hasStatTrak = this.statTrakless !== true && this.possibleSouvenirStickers === undefined;
         const alwaysStatTrak = this.statTrakOnly === true;
         let stickers = this.possibleSouvenirStickers !== undefined && this.guaranteedSouvenirSticker !== undefined ? new Map(
-            Object.entries(getRandom(this.possibleSouvenirStickers, randomInt(1, 4)))
+            Object.entries(getRandom(this.possibleSouvenirStickers, randomInt(2, 4)))
                 .filter(([, id]) => this.economy.items.has(id))
                 .map(([slot, sticker]) => [parseInt(slot, 10), {
                     id: sticker,
