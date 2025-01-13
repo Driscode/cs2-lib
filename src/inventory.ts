@@ -35,6 +35,7 @@ export interface CS2BaseInventoryItem {
             seed?: number;
             x?: number;
             y?: number;
+            z?: number;
         }
     >;
     nameTag?: string;
@@ -621,14 +622,14 @@ Partial<CS2BaseInventoryItem>): void {
         if (patches !== undefined) {
             this.patches = new Map(
                 Object.entries(patches)
-                    .filter(([, { id }]) => this.economy.items.has(id))
+                    .filter(([, patchId]) => this.economy.items.has(patchId))
                     .map(([slot, patchId]) => [parseInt(slot, 10), patchId])
             );
         }
         if (stickers !== undefined) {
             this.stickers = new Map(
                 Object.entries(stickers)
-                    .filter(([, sticker]) => this.economy.items.has(sticker.id))
+                    .filter(([, {id}]) => this.economy.items.has(id))
                     .map(([slot, sticker]) => [parseInt(slot, 10), sticker])
             );
         }
