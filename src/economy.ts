@@ -699,14 +699,6 @@ export class CS2EconomyItem
                 if (sticker !== undefined) sticker.id = this.guaranteedSouvenirSticker
             }
         }
-        const stickers3: any = this.possibleSouvenirStickers !== undefined && this.guaranteedSouvenirSticker !== undefined ? Object.fromEntries(new Map(
-                Object.entries(getRandom(this.possibleSouvenirStickers, randomInt(1, 3)))
-                    .filter(([, id]) => this.economy.items.has(id))
-                    .map(([slot, sticker]) => [parseInt(slot, 10), {
-                        id: sticker,
-                    }]))) : undefined;
-        if (stickers !== undefined) console.log(Object.fromEntries(stickers))
-        console.log(stickers3)
 
         return {
             attributes: {
