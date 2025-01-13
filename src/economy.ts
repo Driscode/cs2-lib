@@ -684,6 +684,23 @@ export class CS2EconomyItem
         const unlocked = ensure(stack[Math.floor(Math.random() * stack.length)]);
         const hasStatTrak = this.statTrakless !== true && this.possibleSouvenirStickers === undefined;
         const alwaysStatTrak = this.statTrakOnly === true;
+        let stickers = this.possibleSouvenirStickers !== undefined && this.guaranteedSouvenirSticker !== undefined ? new Map(
+            Object.entries(getRandom(this.possibleSouvenirStickers, randomInt(1, 4)))
+                .filter(([, id]) => this.economy.items.has(id))
+                .map(([slot, sticker]) => [parseInt(slot, 10), {
+                    id: sticker,
+                }])) : undefined
+
+
+        if (stickers !== undefined) {
+            const slotTournamentSticker = randomInt(0, stickers?.size-1)
+            if (stickers?.get(slotTournamentSticker) !== undefined) {
+                const sticker = stickers?.get(slotTournamentSticker)
+                console.log(sticker)
+                if (sticker !== undefined) sticker.id = this.guaranteedSouvenirSticker
+            }
+        }
+
         return {
             attributes: {
                 containerId: this.id,
@@ -702,13 +719,7 @@ export class CS2EconomyItem
                               .substring(0, CS2_WEAR_FACTOR.toString().length)
                       )
                     : undefined,
-                stickers: this.possibleSouvenirStickers !== undefined && this.guaranteedSouvenirSticker !== undefined ? Object.fromEntries(new Map(
-                    Object.entries(getRandom(this.possibleSouvenirStickers.concat(this.guaranteedSouvenirSticker), randomInt(1, 3)))
-                        .filter(([, id]) => this.economy.items.has(id))
-                        .map(([slot, sticker]) => [parseInt(slot, 10), {
-                            id: sticker,
-                        }])
-                )) : undefined,
+                stickers: stickers !== undefined ? Object.fromEntries(stickers) : undefined,
             },
             souvenir: this.possibleSouvenirStickers !== undefined ? true : undefined,
             id: unlocked.id,
