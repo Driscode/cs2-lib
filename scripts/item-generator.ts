@@ -1401,9 +1401,9 @@ export class ItemGenerator {
         const souvenirStickers: number[] = []
         for (const [
             index,
-            {tournament_event_id}
+            {tournament_event_id, sticker_material}
         ] of Object.entries(this.gameItems.sticker_kits)) {
-            if (tournament_event_id === selected_tournament_event_id) {
+            if (tournament_event_id === selected_tournament_event_id && sticker_material.endsWith("gold")) {
                 const id = this.itemIdentifierManager.allIdentifiers.indexOf(`sticker_${index}`);
                 if (id >= 0) souvenirStickers.push(id)
             }
