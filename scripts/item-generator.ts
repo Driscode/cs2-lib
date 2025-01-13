@@ -1407,7 +1407,7 @@ export class ItemGenerator {
             if (tournament_event_id === selected_tournament_event_id && sticker_material !== undefined && sticker_material.endsWith("gold")) {
                 const id = this.itemIdentifierManager.allIdentifiers.indexOf(`sticker_${index}`);
                 if (id >= 0) souvenirStickers.push(id)
-            } else if (sticker_material !== undefined && sticker_material.startsWith("cologne2014")) {
+            } else if (sticker_material !== undefined && selected_tournament_event_id === "4" && sticker_material.startsWith("cologne2014")) {
                 const id = this.itemIdentifierManager.allIdentifiers.indexOf(`sticker_${index}`);
                 if (id >= 0) souvenirStickers.push(id)
             }
