@@ -1415,17 +1415,16 @@ export class ItemGenerator {
         return souvenirStickers
     }
     private getSouvenirGuaranteedSticker(selected_tournament_event_id?: string) {
-        const souvenirStickers: number[] = []
         for (const [
             index,
             {tournament_event_id, tournament_team_id, sticker_material}
         ] of Object.entries(this.gameItems.sticker_kits)) {
-            if (tournament_event_id === selected_tournament_event_id && sticker_material !== undefined && sticker_material.endsWith("gold") && tournament_team_id === undefined || (tournament_team_id !== undefined && !isNaN(Number(tournament_team_id)) && Number(tournament_team_id) === 0)) {
-                if (tournament_team_id === undefined && !isNaN(Number(tournament_event_id)) && Number(tournament_event_id) === 4) return this.itemIdentifierManager.allIdentifiers.indexOf(`sticker_172}`)
-                return this.itemIdentifierManager.allIdentifiers.indexOf(`sticker_${index}`);
+            if (tournament_event_id === selected_tournament_event_id && sticker_material !== undefined) {
+                if (tournament_team_id === undefined && !isNaN(Number(selected_tournament_event_id)) && Number(selected_tournament_event_id) === 4) return this.itemIdentifierManager.allIdentifiers.indexOf(`sticker_172`)
+                else if (!isNaN(Number(selected_tournament_event_id)) && Number(selected_tournament_event_id) !== 4 && sticker_material.endsWith("gold") && tournament_team_id !== undefined && !isNaN(Number(tournament_team_id)) && Number(tournament_team_id) === 0) return this.itemIdentifierManager.allIdentifiers.indexOf(`sticker_${index}`)
             }
+
         }
-        return souvenirStickers
     }
     private getAgentVoPrefix(model: string, prefix?: string) {
         switch (true) {
