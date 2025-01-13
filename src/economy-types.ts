@@ -75,7 +75,7 @@ export interface CS2Item {
     rarity?: CS2RarityColorValues | undefined;
     parentPaintkitId?: number | undefined;
     possibleSouvenirStickers?: number[] | undefined;
-    guaranteedSouvenirSticker: number | undefined;
+    guaranteedSouvenirSticker?: number | undefined;
     specials?: number[] | undefined;
     specialsImage?: boolean | undefined;
     statTrakless?: boolean | undefined;
