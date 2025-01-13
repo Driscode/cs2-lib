@@ -987,7 +987,7 @@ export class ItemGenerator {
                     rarity: this.getRarityColorHex(["common"]),
                     specials: this.itemManager.get(id)?.specials ?? specials,
                     possibleSouvenirStickers: hasSouvenirStickers ? this.getSouvenirStickers(attributes?.["tournament event id"]?.value ?? "") : undefined,
-                    guaranteedSouvenirSticker: hasSouvenirStickers ? this.getSouvenirGuaranteedSticker(attributes?.["tournament event id"]?.value) : undefined,
+                    guaranteedSouvenirSticker: hasSouvenirStickers ? this.getSouvenirGuaranteedSticker(attributes?.["tournament event id"]?.value, id) : undefined,
                     specialsImage: this.getSpecialsImage(id, image_unusual_item),
                     statTrakless: containsMusicKit && !containsStatTrak ? true : undefined,
                     statTrakOnly: containsMusicKit && containsStatTrak ? true : undefined,
@@ -1414,14 +1414,14 @@ export class ItemGenerator {
         }
         return souvenirStickers
     }
-    private getSouvenirGuaranteedSticker(selected_tournament_event_id?: string) {
+    private getSouvenirGuaranteedSticker(selected_tournament_event_id?: string, id?: number) {
         for (const [
             index,
             {tournament_event_id, tournament_team_id, sticker_material}
         ] of Object.entries(this.gameItems.sticker_kits)) {
             if (tournament_event_id === selected_tournament_event_id && sticker_material !== undefined) {
                 if (tournament_team_id === undefined && !isNaN(Number(selected_tournament_event_id)) && Number(selected_tournament_event_id) === 4) return this.itemIdentifierManager.allIdentifiers.indexOf(`sticker_172`)
-                else if (!isNaN(Number(selected_tournament_event_id)) && Number(selected_tournament_event_id) !== 4 && sticker_material.endsWith("gold") && tournament_team_id !== undefined && !isNaN(Number(tournament_team_id)) && Number(tournament_team_id) === 0) return this.itemIdentifierManager.allIdentifiers.indexOf(`sticker_${index}`)
+                else if (!isNaN(Number(selected_tournament_event_id)) && Number(selected_tournament_event_id) !== 4 && sticker_material.endsWith("gold") && (tournament_team_id === undefined || (!isNaN(Number(tournament_team_id)) && Number(tournament_team_id) === 0))) return this.itemIdentifierManager.allIdentifiers.indexOf(`sticker_${index}`)
             }
 
         }
