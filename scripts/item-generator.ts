@@ -157,6 +157,7 @@ export class ItemGenerator {
         this.parseAgents();
         this.parseCollectibles();
         this.parseTools();
+        this.parseCustomTools();
         this.parseContainers();
         this.parseCustomContainers();
         this.parseCustomSkins();
@@ -865,6 +866,40 @@ export class ItemGenerator {
                 rarity: this.getRarityColorHex(["common"]),
                 teams: undefined,
                 type: CS2ItemType.Tool
+            });
+        }
+    }
+    private parseCustomTools() {
+        warning("Parsing tools...");
+        for (const [index, {name, baseitem, item_name, image_inventory, prefab, item_description, wear_remap_min, wear_remap_max}] of Object.entries(
+            this.gameItemsCustom.items
+        )) {
+            if (
+                prefab !== "recipe" &&
+                (item_name === undefined ||
+                    image_inventory === undefined ||
+                    !image_inventory.includes("econ/tools/") ||
+                    !prefab?.includes("csgo_tool"))
+            ) {
+                continue;
+            }
+            const id = this.itemIdentifierManager.get(`tool_${index}`);
+            const thePrefab = this.gameItems.prefabs[prefab];
+            const image = ensure(image_inventory || thePrefab?.image_inventory);
+            this.addContainerItem(name, id);
+            this.addTranslation(id, "name", "#CSGO_Type_Tool", " | ", item_name);
+            this.addTranslation(id, "desc", item_description);
+            this.addItem({
+                def: Number(index),
+                free: baseitem === "1" && index !== REMOVE_KEYCHAIN_TOOL_INDEX ? true : undefined,
+                id,
+                image: this.getImage(id, image),
+                index: undefined,
+                rarity: this.getRarityColorHex(["common"]),
+                teams: undefined,
+                type: CS2ItemType.Tool,
+                wearMin: wear_remap_min === undefined ? undefined : wear_remap_min,
+                wearMax: wear_remap_max === undefined ? undefined : wear_remap_max
             });
         }
     }

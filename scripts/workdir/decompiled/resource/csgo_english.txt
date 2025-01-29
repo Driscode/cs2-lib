@@ -44362,6 +44362,10 @@
         "magazine" "Magazine"
         "body" "Body"
         "barrel" "Barrel"
+        "CSGO_tool_airblower_premium" "Airblower Premium"
+        "CSGO_tool_airblower_free" "Airblower Free"
+        "CSGO_tool_airblower_premium_desc" "A top tier air blower that will not break so easily. Use this to remove stickers from weapons. Lasts 3 uses"
+        "CSGO_tool_airblower_free_desc" "A tool used to carefully remove stickers from weapon. will break on first use"
 
 // SFUI_ENGLISH.txt
 // ---------------------------------------------------------------------------------------------

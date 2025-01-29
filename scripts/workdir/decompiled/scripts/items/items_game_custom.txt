@@ -807,6 +807,47 @@
                  "restriction" "generic_valve_key"
              }
          }
+         "120000"
+         {
+             "name"		"airblower_free"
+             "first_sale_date"		"2025/1/29"
+             "prefab"		"csgo_tool"
+             "item_name"		"#CSGO_tool_airblower_free"
+             "item_description"		"#CSGO_tool_airblower_free_desc"
+             "image_inventory"		"econ/tools/airblower_free"
+             "tool"
+             {
+                 "type"		"airblower_free"
+                 "usage_capabilities"
+                 {
+                     "can_detach_sticker"		"1"
+                 }
+             }
+
+			"wear_remap_min"		"0"
+			"wear_remap_max"		"1"
+             "inv_container_and_tools"		"tool"
+         }
+         "120001"
+         {
+             "name"		"airblower_premium"
+             "first_sale_date"		"2025/1/29"
+             "prefab"		"csgo_tool"
+             "item_name"		"#CSGO_tool_airblower_premium"
+             "item_description"		"#CSGO_tool_airblower_premium_desc"
+             "image_inventory"		"econ/tools/airblower_premium"
+             "tool"
+             {
+                 "type"		"airblower_premium"
+                 "usage_capabilities"
+                 {
+                     "can_detach_sticker"		"1"
+                 }
+             }
+			"wear_remap_min"		"0"
+			"wear_remap_max"		"3"
+             "inv_container_and_tools"		"tool"
+         }
      }
      "paint_kits_rarity" {
          "[cu_m4a1_howling]stock" "ancient"
