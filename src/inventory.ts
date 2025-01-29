@@ -14,7 +14,7 @@ import {
     CS2_MIN_KEYCHAIN_SEED,
     CS2_MIN_STICKER_WEAR,
     CS2_MIN_WEAR,
-    CS2_STICKER_WEAR_FACTOR
+    CS2_STICKER_WEAR_FACTOR, CS2_AIRBLOWER_WEAR_FACTOR
 } from "./economy-constants.js";
 import { CS2ItemType, type CS2ItemTypeValues, type CS2UnlockedItem } from "./economy-types.js";
 import { CS2Economy, CS2EconomyInstance, CS2EconomyItem } from "./economy.js";
@@ -483,6 +483,28 @@ export class CS2Inventory {
             return this;
         }
         sticker.wear = nextWear;
+        target.updatedAt = getTimestamp();
+        return this;
+    }
+
+    removeItemSticker(airBlowerToolUid: number, targetUid: number, slot: number): this {
+        const airBlower = this.get(airBlowerToolUid).expectAirblower();
+        const target = this.get(targetUid);
+        assert(target.hasAirblower());
+        assert(target.stickers !== undefined);
+
+        const sticker = ensure(target.stickers.get(slot));
+
+        target.stickers.delete(slot);
+        const nextWear = float(airBlower.wear! + CS2_AIRBLOWER_WEAR_FACTOR);
+        if (nextWear >= airBlower.getMaximumWear()) {
+            this.remove(airBlowerToolUid)
+        }
+        airBlower.wear! += nextWear
+        if (target.stickers.size === 0) {
+            target.stickers = undefined;
+        }
+        this.add(sticker)
         target.updatedAt = getTimestamp();
         return this;
     }

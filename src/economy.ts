@@ -38,7 +38,10 @@ import {
     CS2_TEAMS_BOTH,
     CS2_TEAMS_CT,
     CS2_TEAMS_T,
-    CS2_WEAR_FACTOR
+    CS2_WEAR_FACTOR,
+    CS2_AIRBLOWABLE_ITEMS,
+    CS2_AIRBLOWER_PREMIUM_TOOL_DEF,
+    CS2_AIRBLOWER_FREE_TOOL_DEF
 } from "./economy-constants.js";
 import {
     CS2RarityColorName,
@@ -68,6 +71,7 @@ import {
 } from "./economy-types.js";
 import { type CS2TeamValues } from "./teams.js";
 import { type Interface, assert, compare, ensure, safe } from "./utils.js";
+import type {CS2InventoryItem} from "./inventory.js";
 
 type CS2EconomyItemPredicate = Partial<CS2EconomyItem> & { team?: CS2TeamValues };
 
@@ -503,6 +507,13 @@ export class CS2EconomyItem
         return this.isTool() && this.def === CS2_NAMETAG_TOOL_DEF;
     }
 
+    isAirblowerFree(): boolean {
+        return this.isTool() && this.def === CS2_AIRBLOWER_FREE_TOOL_DEF;
+    }
+    isAirblowerPremium(): boolean {
+        return this.isTool() && this.def === CS2_AIRBLOWER_PREMIUM_TOOL_DEF;
+    }
+
     isStatTrakSwapTool(): boolean {
         return this.isTool() && this.def === CS2_STATTRAK_SWAP_TOOL_DEF;
     }
@@ -540,6 +551,11 @@ export class CS2EconomyItem
         return this;
     }
 
+    expectAirblower(): this {
+        assert(this.isAirblowerFree() || this.isAirblowerPremium());
+        return this;
+    }
+
     expectStatTrakSwapTool(): this {
         assert(this.isStatTrakSwapTool());
         return this;
@@ -556,7 +572,7 @@ export class CS2EconomyItem
     }
 
     hasWear(): boolean {
-        return CS2_PAINTABLE_ITEMS.includes(this.type) && !this.free && this.index !== 0;
+        return (CS2_PAINTABLE_ITEMS.includes(this.type) && !this.free && this.index !== 0) || this.isAirblowerFree() || this.isAirblowerPremium();
     }
 
     hasSeed(): boolean {
@@ -577,6 +593,10 @@ export class CS2EconomyItem
 
     hasNametag(): boolean {
         return CS2_NAMETAGGABLE_ITEMS.includes(this.type) || this.isStorageUnit();
+    }
+
+    hasAirblower(): boolean {
+        return CS2_AIRBLOWABLE_ITEMS.includes(this.type);
     }
 
     hasStatTrak(): boolean {

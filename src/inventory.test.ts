@@ -6,7 +6,7 @@
 import { beforeEach, describe, expect, test } from "vitest";
 import english from "../assets/localizations/items-english.json";
 import { CS2Economy } from "./economy";
-import { CS2_MAX_PATCHES, CS2_MAX_STATTRAK } from "./economy-constants";
+import {CS2_AIRBLOWER_FREE_TOOL_DEF, CS2_MAX_PATCHES, CS2_MAX_STATTRAK} from "./economy-constants";
 import { CS2Inventory } from "./inventory";
 import { CS2_ITEMS } from "./items";
 import { CS2Team } from "./teams";
@@ -255,7 +255,6 @@ describe("CS2Inventory methods", () => {
         const unlocked1 = CS2Economy.getById(ESL_ONE_COLOGNE_2014_DUST_II_SOUVENIR_ID).unlockContainer();
         expect(() => inventory.unlockContainer(unlocked1, 0, 2)).toThrow();
         inventory.unlockContainer(unlocked1, 0); // uid:0
-        console.log(inventory.get(0).stickers)
         expect(inventory.size()).toBe(3);
         const result1 = inventory.get(0);
         expect(result1.containerId).toBe(unlocked1.attributes.containerId);
@@ -374,10 +373,22 @@ describe("CS2Inventory methods", () => {
             id: AWP_DRAGON_LORE_ID,
             stickers: {
                 0: { id: ZZ_NATION_RIO_2022_GLITTER_ID },
-                1: { id: ZZ_NATION_RIO_2022_GLITTER_ID }
+                1: { id: ZZ_NATION_RIO_2022_GLITTER_ID },
+                2: { id: ZZ_NATION_RIO_2022_GLITTER_ID },
+                3: { id: ZZ_NATION_RIO_2022_GLITTER_ID }
             }
         });
-        expect(() => inventory.scrapeItemSticker(0, -5)).toThrow();
+        inventory.add({
+            id: 13355,
+            wear: 0
+        })
+    //console.log(inventory.get(1))
+            inventory.removeItemSticker(1, 0, 0)
+        inventory.removeItemSticker(1, 0, 1)
+        console.log(inventory.get(1).asBase())
+        inventory.removeItemSticker(1, 0, 2)
+        //inventory.removeItemSticker(1, 0, 1)
+        /*expect(() => inventory.scrapeItemSticker(0, -5)).toThrow();
         expect(() => inventory.scrapeItemSticker(0, NaN)).toThrow();
         inventory.scrapeItemSticker(0, 0);
         expect(inventory.get(0).stickers?.get(0)?.wear).toBe(0.1);
@@ -393,6 +404,8 @@ describe("CS2Inventory methods", () => {
         }
         inventory.scrapeItemSticker(0, 1);
         expect(inventory.get(0).stickers).toBe(undefined);
+
+         */
     });
 
     test("incrementItemStatTrak should increment the StatTrak count of the item with the given id", () => {

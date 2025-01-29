@@ -34,12 +34,15 @@ export const CS2_MAX_PATCHES = 5;
 export const CS2_MAX_KEYCHAINS = 1;
 
 export const CS2_STICKER_WEAR_FACTOR = 0.1;
+export const CS2_AIRBLOWER_WEAR_FACTOR = 1;
 export const CS2_WEAR_FACTOR = 0.000001;
 
 export const CS2_NAMETAG_RE = /^[A-Za-z0-9`!@#$%^&*-+=(){}\[\]\/\|\\,.?:;'_\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\s]{0,20}$/u;
 
 export const CS2_CONTRACT_TOOL_DEF = 62;
 export const CS2_NAMETAG_TOOL_DEF = 1200;
+export const CS2_AIRBLOWER_FREE_TOOL_DEF = 120000;
+export const CS2_AIRBLOWER_PREMIUM_TOOL_DEF = 120001;
 export const CS2_STATTRAK_SWAP_TOOL_DEF = 1324;
 export const CS2_STORAGE_UNIT_TOOL_DEF = 1201;
 
@@ -48,6 +51,7 @@ export const CS2_DISPLAY_ITEMS: CS2ItemTypeValues[] = [CS2ItemType.Collectible, 
 export const CS2_EQUIPMENT_ITEMS: CS2ItemTypeValues[] = [CS2ItemType.Weapon, CS2ItemType.Agent, CS2ItemType.Gloves, CS2ItemType.Melee, CS2ItemType.MusicKit];
 export const CS2_GRAPHIC_ART_ITEMS: CS2ItemTypeValues[] = [CS2ItemType.Patch, CS2ItemType.Sticker, CS2ItemType.Graffiti, CS2ItemType.Keychain];
 export const CS2_NAMETAGGABLE_ITEMS: CS2ItemTypeValues[] = [CS2ItemType.Melee, CS2ItemType.Weapon];
+export const CS2_AIRBLOWABLE_ITEMS: CS2ItemTypeValues[] = [CS2ItemType.Weapon];
 export const CS2_PAINTABLE_ITEMS: CS2ItemTypeValues[] = [CS2ItemType.Gloves, CS2ItemType.Melee, CS2ItemType.Weapon];
 export const CS2_PATCHABLE_ITEMS: CS2ItemTypeValues[] = [CS2ItemType.Agent];
 export const CS2_SEEDABLE_ITEMS: CS2ItemTypeValues[] = [CS2ItemType.Weapon, CS2ItemType.Melee, CS2ItemType.Gloves, CS2ItemType.Keychain];
