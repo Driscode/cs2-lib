@@ -871,7 +871,7 @@ export class ItemGenerator {
     }
     private parseCustomTools() {
         warning("Parsing tools...");
-        for (const [index, {name, baseitem, item_name, image_inventory, prefab, item_description, wear_remap_min, wear_remap_max}] of Object.entries(
+        for (const [index, {name, baseitem, item_name, image_inventory, prefab, item_description, wear_remap_min, wear_remap_max, tool: {type}}] of Object.entries(
             this.gameItemsCustom.items
         )) {
             if (
@@ -893,7 +893,7 @@ export class ItemGenerator {
                 def: Number(index),
                 free: baseitem === "1" && index !== REMOVE_KEYCHAIN_TOOL_INDEX ? true : undefined,
                 id,
-                image: this.getImage(id, image),
+                image: this.getCustomToolImage(id, type),
                 index: undefined,
                 rarity: this.getRarityColorHex(["common"]),
                 teams: undefined,
@@ -1358,6 +1358,19 @@ export class ItemGenerator {
             resolve(
                 IMAGES_PATH,
                 `econ/default_generated/${className}_${paintClassName}_${suffix}_png.png`.toLowerCase()
+            ),
+            resolve(process.cwd(), `assets/images/${id}_${suffix}.png`)
+        ]);
+        for (const [src, dest] of paths) {
+            copyFileSync(src, dest);
+        }
+        return this.getImage(id, paths[0][0].replace("_png.png", ""));
+    }
+    private getCustomToolImage(id: number, itemName: string | undefined) {
+        const paths = PAINT_IMAGE_SUFFIXES.map((suffix) => [
+            resolve(
+                IMAGES_PATH,
+                `econ/tools/${itemName}_${suffix}_png.png`.toLowerCase()
             ),
             resolve(process.cwd(), `assets/images/${id}_${suffix}.png`)
         ]);
