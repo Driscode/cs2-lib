@@ -898,8 +898,8 @@ export class ItemGenerator {
                 rarity: this.getRarityColorHex(["common"]),
                 teams: undefined,
                 type: CS2ItemType.Tool,
-                wearMin: wear_remap_min === undefined ? undefined : wear_remap_min,
-                wearMax: wear_remap_max === undefined ? undefined : wear_remap_max
+                wearMax: wear_remap_max !== undefined ? Number(wear_remap_max) : CS2_DEFAULT_MAX_WEAR,
+                wearMin: wear_remap_min !== undefined ? Number(wear_remap_min) : CS2_DEFAULT_MIN_WEAR,
             });
         }
     }

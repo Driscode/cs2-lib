@@ -98,6 +98,8 @@ export type CS2GameItems = {
                 };
                 used_by_classes?: Record<string, string>;
                 vo_prefix?: string;
+                wear_remap_max?: string;
+                wear_remap_min?: string;
             };
         };
         music_definitions: {
