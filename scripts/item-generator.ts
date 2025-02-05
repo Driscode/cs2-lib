@@ -871,7 +871,7 @@ export class ItemGenerator {
     }
     private parseCustomTools() {
         warning("Parsing tools...");
-        for (const [index, {name, baseitem, item_name, image_inventory, prefab, item_description, wear_remap_min, wear_remap_max, tool: {type}}] of Object.entries(
+        for (const [index, {name, baseitem, item_name, image_inventory, prefab, item_description, max_uses, tool}] of Object.entries(
             this.gameItemsCustom.items
         )) {
             if (
@@ -893,13 +893,13 @@ export class ItemGenerator {
                 def: Number(index),
                 free: baseitem === "1" && index !== REMOVE_KEYCHAIN_TOOL_INDEX ? true : undefined,
                 id,
-                image: this.getCustomToolImage(id, type),
+                image: this.getCustomToolImage(id, tool?.type),
                 index: undefined,
                 rarity: this.getRarityColorHex(["common"]),
                 teams: undefined,
                 type: CS2ItemType.Tool,
-                wearMax: wear_remap_max !== undefined ? Number(wear_remap_max) : CS2_DEFAULT_MAX_WEAR,
-                wearMin: wear_remap_min !== undefined ? Number(wear_remap_min) : CS2_DEFAULT_MIN_WEAR,
+                maxUses: max_uses !== undefined ? Number(max_uses) : 1,
+                uses: 0,
             });
         }
     }

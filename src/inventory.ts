@@ -14,7 +14,7 @@ import {
     CS2_MIN_KEYCHAIN_SEED,
     CS2_MIN_STICKER_WEAR,
     CS2_MIN_WEAR,
-    CS2_STICKER_WEAR_FACTOR, CS2_AIRBLOWER_WEAR_FACTOR
+    CS2_STICKER_WEAR_FACTOR, CS2_AIRBLOWER_WEAR_FACTOR, CS2_AIRBLOWER_USES_FACTOR
 } from "./economy-constants.js";
 import { CS2ItemType, type CS2ItemTypeValues, type CS2UnlockedItem } from "./economy-types.js";
 import { CS2Economy, CS2EconomyInstance, CS2EconomyItem } from "./economy.js";
@@ -60,6 +60,8 @@ export interface CS2BaseInventoryItem {
     wear?: number;
     price?: number; 
     userId?: string;
+    uses?: number;
+    maxUses?: number;
 }
 
 export interface CS2InventoryData {
@@ -496,11 +498,12 @@ export class CS2Inventory {
         const sticker = ensure(target.stickers.get(slot));
 
         target.stickers.delete(slot);
-        const nextWear = float(airBlower.wear! + CS2_AIRBLOWER_WEAR_FACTOR);
-        if (nextWear >= airBlower.getMaximumWear()) {
+        const nextWear = float((airBlower.uses ?? 0) + CS2_AIRBLOWER_USES_FACTOR);
+        if (nextWear >= airBlower.getMaximumUses()) {
             this.remove(airBlowerToolUid)
+        } else {
+            airBlower.uses = nextWear
         }
-        airBlower.wear! += nextWear
         if (target.stickers.size === 0) {
             target.stickers = undefined;
         }
@@ -640,6 +643,7 @@ export class CS2InventoryItem
     recyclable: boolean | undefined;
     updatedAt: number | undefined;
     wear: number | undefined;
+    uses: number | undefined;
     price: number | undefined; 
     userId: string | undefined;
 
@@ -794,6 +798,8 @@ Partial<CS2BaseInventoryItem>): void {
                     : undefined,
             updatedAt: this.updatedAt,
             wear: this.wear,
+            uses: this.uses,
+            maxUses: this.maxUses,
             price: this.price,
             userId: this.userId,
             sellable: this.sellable !== undefined ? this.sellable : undefined,

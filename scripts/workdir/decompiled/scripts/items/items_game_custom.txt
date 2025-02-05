@@ -825,7 +825,7 @@
              }
 
 			"wear_remap_min"		"0"
-			"wear_remap_max"		"1"
+			"max_uses"		"1"
              "inv_container_and_tools"		"tool"
          }
          "120001"
@@ -844,8 +844,7 @@
                      "can_detach_sticker"		"1"
                  }
              }
-			"wear_remap_min"		"0"
-			"wear_remap_max"		"3"
+			"max_uses"		"3"
              "inv_container_and_tools"		"tool"
          }
      }

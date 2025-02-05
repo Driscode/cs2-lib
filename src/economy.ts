@@ -330,6 +330,7 @@ export class CS2EconomyItem
     voPrefix: string | undefined;
     wearMax: number | undefined;
     wearMin: number | undefined;
+    maxUses: number | undefined;
 
     private _contents: number[] | undefined;
     private _specials: number[] | undefined;
@@ -645,6 +646,9 @@ export class CS2EconomyItem
 
     getMaximumWear(): number {
         return this.wearMax ?? CS2_MAX_WEAR;
+    }
+    getMaximumUses(): number {
+        return this.maxUses
     }
 
     groupContents(): Record<string, CS2EconomyItem[]> {
