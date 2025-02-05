@@ -41,7 +41,8 @@ import {
     CS2_WEAR_FACTOR,
     CS2_AIRBLOWABLE_ITEMS,
     CS2_AIRBLOWER_PREMIUM_TOOL_DEF,
-    CS2_AIRBLOWER_FREE_TOOL_DEF
+    CS2_AIRBLOWER_FREE_TOOL_DEF,
+    CS2_MAX_USES
 } from "./economy-constants.js";
 import {
     CS2RarityColorName,
