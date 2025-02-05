@@ -4,23 +4,24 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-    CS2_MAX_KEYCHAINS,
+    CS2_AIRBLOWER_USES_FACTOR,
     CS2_MAX_KEYCHAIN_SEED,
+    CS2_MAX_KEYCHAINS,
     CS2_MAX_PATCHES,
     CS2_MAX_STATTRAK,
-    CS2_MAX_STICKERS,
     CS2_MAX_STICKER_WEAR,
+    CS2_MAX_STICKERS,
     CS2_MAX_WEAR,
     CS2_MIN_KEYCHAIN_SEED,
     CS2_MIN_STICKER_WEAR,
     CS2_MIN_WEAR,
-    CS2_STICKER_WEAR_FACTOR, CS2_AIRBLOWER_WEAR_FACTOR, CS2_AIRBLOWER_USES_FACTOR
+    CS2_STICKER_WEAR_FACTOR
 } from "./economy-constants.js";
-import { CS2ItemType, type CS2ItemTypeValues, type CS2UnlockedItem } from "./economy-types.js";
-import { CS2Economy, CS2EconomyInstance, CS2EconomyItem } from "./economy.js";
-import { resolveInventoryData } from "./inventory-upgrader.js";
-import { CS2Team, type CS2TeamValues } from "./teams.js";
-import { type Interface, type MapValue, type RecordValue, assert, ensure, float } from "./utils.js";
+import {CS2ItemType, type CS2ItemTypeValues, type CS2UnlockedItem} from "./economy-types.js";
+import {CS2Economy, CS2EconomyInstance, CS2EconomyItem} from "./economy.js";
+import {resolveInventoryData} from "./inventory-upgrader.js";
+import {CS2Team, type CS2TeamValues} from "./teams.js";
+import {assert, ensure, float, type Interface, type MapValue, type RecordValue} from "./utils.js";
 
 export interface CS2BaseInventoryItem {
     containerId?: number;

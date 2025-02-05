@@ -648,7 +648,7 @@ export class CS2EconomyItem
         return this.wearMax ?? CS2_MAX_WEAR;
     }
     getMaximumUses(): number {
-        return this.maxUses
+        return this.maxUses ?? CS2_MAX_USES;
     }
 
     groupContents(): Record<string, CS2EconomyItem[]> {

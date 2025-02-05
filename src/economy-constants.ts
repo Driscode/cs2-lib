@@ -11,6 +11,7 @@ export const CS2_MAX_STATTRAK = 999999;
 
 export const CS2_MIN_WEAR = 0;
 export const CS2_MAX_WEAR = 1;
+export const CS2_MAX_USES = 1;
 export const CS2_DEFAULT_MIN_WEAR = 0.06;
 export const CS2_DEFAULT_MAX_WEAR = 0.8;
 export const CS2_MIN_FACTORY_NEW_WEAR = CS2_MIN_WEAR;
